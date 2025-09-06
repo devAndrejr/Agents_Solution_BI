@@ -1,0 +1,108 @@
+/* style.css */
+
+/* General body styling */
+body {
+    font-family: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    color: #333;
+    background-color: #f0f2f6;
+}
+
+/* Main header styling */
+.main-header {
+    color: #1a237e; /* Deep blue */
+    font-size: 2.5em;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #e0e0e0;
+}
+
+/* Sub header styling */
+.sub-header {
+    color: #3f51b5; /* Indigo */
+    font-size: 1.5em;
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+/* Footer styling */
+.footer {
+    text-align: center;
+    margin-top: 50px;
+    padding-top: 20px;
+    border-top: 1px solid #e0e0e0;
+    color: #757575;
+    font-size: 0.9em;
+}
+
+/* Streamlit specific adjustments */
+/* Hide admin panel links for non-admins */
+div[data-testid="stSidebarNav"] ul li:nth-child(4),
+div[data-testid="stSidebarNav"] ul li:nth-child(5) { 
+    display: none;
+}
+
+/* Chat message styling */
+.stChatMessage {
+    background-color: #ffffff;
+    border-radius: 10px;
+    padding: 15px;
+    margin-bottom: 10px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+/* User message alignment */
+.stChatMessage[data-testid="stChatMessage-user"] {
+    text-align: right;
+    background-color: #e3f2fd; /* Light blue for user messages */
+}
+
+/* Assistant message alignment */
+.stChatMessage[data-testid="stChatMessage-assistant"] {
+    text-align: left;
+    background-color: #f1f8e9; /* Light green for assistant messages */
+}
+
+/* Sidebar styling */
+.stSidebar {
+    background-color: #ffffff;
+    padding: 20px;
+    box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+}
+
+/* Sidebar button styling */
+.stSidebar button {
+    width: 100%;
+    margin-top: 10px;
+    background-color: #4285F4; /* Google Blue */
+    color: white;
+    border-radius: 5px;
+    padding: 10px;
+    font-size: 1em;
+    border: none;
+    cursor: pointer;
+}
+
+.stSidebar button:hover {
+    background-color: #3367D6; /* Darker Google Blue */
+}
+
+/* Info boxes in sidebar */
+.stSidebar .stAlert {
+    background-color: #e8f5e9; /* Light green for info */
+    border-left: 5px solid #4CAF50; /* Green border */
+}
+
+/* Input field styling */
+.stTextInput > div > div > input {
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    padding: 10px;
+    font-size: 1em;
+}
+
+/* Spinner styling */
+.stSpinner > div > div {
+    color: #3f51b5; /* Indigo */
+}

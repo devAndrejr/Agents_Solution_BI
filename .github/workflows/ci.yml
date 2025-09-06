@@ -1,0 +1,56 @@
+name: CI - Caçulinha BI
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout código
+        uses: actions/checkout@v3
+
+      - name: Configurar Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Instalar dependências
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install pytest requests
+
+      - name: Rodar verificação de endpoints MCP
+        run: |
+          python scripts/verifica_endpoints_mcp.py
+
+      - name: Rodar testes de integração
+        run: |
+          pytest tests/test_endpoints_integra_mcp.py --maxfail=1 --disable-warnings --tb=short
+
+      - name: Enviar alerta para Slack se falhar
+        if: failure()
+        uses: rtCamp/action-slack-notify@v2
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+          SLACK_COLOR: '#ff0000'
+          SLACK_TITLE: 'Falha no CI - Caçulinha BI'
+          SLACK_MESSAGE: 'O pipeline de CI falhou. Verifique os logs e corrija os problemas.'
+
+      - name: Enviar e-mail se falhar
+        if: failure()
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: smtp.gmail.com
+          server_port: 465
+          username: ${{ secrets.EMAIL_USER }}
+          password: ${{ secrets.EMAIL_PASS }}
+          subject: 'Falha no CI - Caçulinha BI'
+          to: ${{ secrets.EMAIL_TO }}
+          from: Caçulinha BI CI <${{ secrets.EMAIL_USER }}>
+          body: |
+            O pipeline de CI falhou. Verifique os logs do GitHub Actions para detalhes.

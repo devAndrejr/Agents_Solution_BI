@@ -1,0 +1,16 @@
+{
+    "database": {
+        "driver": "SQL Server",
+        "server": "localhost",
+        "database": "seu_banco",
+        "trusted_connection": "yes"
+    },
+    "api": {
+        "base_url": "http://localhost:5000",
+        "timeout": 30
+    },
+    "logging": {
+        "level": "INFO",
+        "file": "logs/app.log"
+    }
+}

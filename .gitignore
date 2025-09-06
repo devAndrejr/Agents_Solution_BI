@@ -1,0 +1,69 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.pyc
+*.pyd
+*.pyo
+*.egg-info/
+.Python
+build/
+dist/
+
+# Environments
+.env
+.venv/
+venv/
+env/
+
+# Editors
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# OS generated files
+.DS_Store
+.Trashes
+Thumbs.db
+ehthumbs.db
+ehthumbs_vista.db
+*.stackdump
+[Dd]esktop.ini
+*.bak
+*.swp
+*~
+.fuse_hidden*
+
+# MyPy cache
+.mypy_cache/
+
+# Pytest cache
+.pytest_cache/
+
+# Local databases
+*.db
+*.sqlite3
+data/*.db
+data/*.sqlite3
+
+# Logs
+logs/
+*.log
+
+# Jupyter Notebook files
+.ipynb_checkpoints
+
+# Temporary files
+*.tmp
+tmp/
+
+# Generated charts
+generated_charts/
+
+# Parquet files
+data/parquet/
+data/parquet_cleaned/
+
+# Specific project files to ignore
+Relatorio_integracao_1308.md
+Melhorias_Projeto.txt
+plano_de_melhorias.md

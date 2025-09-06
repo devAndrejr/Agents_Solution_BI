@@ -1,0 +1,17 @@
+{
+  "id": "session_qnpccd70cmn",
+  "created_at": "2025-04-11T21:40:09.557995",
+  "updated_at": "2025-04-11T21:40:09.598660",
+  "messages": [
+    {
+      "role": "user",
+      "content": "qual é o preço da manta lonita",
+      "timestamp": "2025-04-11T21:40:09.582861"
+    },
+    {
+      "role": "assistant",
+      "content": "Desculpe, ocorreu um erro ao processar sua consulta: Client.__init__() got an unexpected keyword argument 'proxies'",
+      "timestamp": "2025-04-11T21:40:09.598660"
+    }
+  ]
+}

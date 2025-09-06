@@ -1,0 +1,59 @@
+# Arquivo: requirements.in
+
+# --- Core Frameworks ---
+langchain>=0.1.0
+langchain-core>=0.1.20
+langchain_community>=0.0.20
+langchain_openai>=0.0.5
+langgraph>=0.0.30
+
+# --- LLM & Environment ---
+openai>=1.6.1
+python-dotenv>=1.0.0
+python-decouple
+
+# --- Security & Authentication ---
+passlib[bcrypt]
+python-jose[cryptography]
+
+
+# --- Web Server (se usar modo Flask) ---
+fastapi
+streamlit>=1.30.0
+flask>=2.3.0
+Flask-Cors>=4.0.0 # Nome correto para pip
+
+# --- Banco de Dados SQL Server ---
+sqlalchemy>=2.0.0
+pyodbc # Geralmente não precisa fixar versão
+alembic # Adicionado para gerenciamento de migrações de banco de dados
+
+# --- Processamento de Dados ---
+pandas>=2.0.0
+numpy>=1.24.0,<2.0.0
+sentence-transformers>=2.3.0
+faiss-cpu
+
+# --- Visualização de Dados ---
+plotly>=5.10.0
+matplotlib>=3.7.0 # Dependência para alguns plots
+seaborn>=0.13.0 # Dependência para alguns plots
+pillow>=10.0.0 # Dependência para imagens
+kaleido>=0.2.0 # Opcional: Para salvar gráficos Plotly estaticamente
+
+# --- Utilitários e Outros (Manter se usados pelo projeto Agente_Teste) ---
+requests>=2.30.0
+psutil>=5.9.0
+pyngrok>=6.0.0
+colorama>=0.4.6
+tqdm>=4.60.0
+pydantic
+mssql-mcp-server
+# LangChain < 0.2.0 pode depender da v1. pip-tools irá fixar.
+
+# --- Dependências de Teste ---
+pytest
+pytest-cov
+
+# --- Error Monitoring ---
+sentry-sdk

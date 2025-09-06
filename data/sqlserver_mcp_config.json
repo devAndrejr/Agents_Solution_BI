@@ -1,0 +1,22 @@
+{
+    "connection": {
+        "server": "FAMILIA\\SQLJR",
+        "database": "Projeto_Opcom",
+        "username": "AgenteVirtual",
+        "password": "Cacula@2020",
+        "driver": "ODBC Driver 17 for SQL Server",
+        "trust_server_certificate": "yes"
+    },
+    "processing": {
+        "max_parallel_queries": 4,
+        "timeout_seconds": 30,
+        "use_stored_procedures": true,
+        "use_partitioning": true
+    },
+    "stored_procedures": {
+        "process_query": "sp_mcp_process_query",
+        "get_sales_data": "sp_mcp_get_sales_data",
+        "get_product_data": "sp_mcp_get_product_data",
+        "get_category_data": "sp_mcp_get_category_data"
+    }
+}

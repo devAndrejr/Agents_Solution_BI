@@ -1,0 +1,60 @@
+{
+    "providers": {
+        "aws": {
+            "name": "Amazon Web Services",
+            "active": false,
+            "default": true,
+            "fallback": false,
+            "credentials": {
+                "access_key": "",
+                "secret_key": "",
+                "region": "us-east-1"
+            },
+            "services": {
+                "lambda": true,
+                "s3": true,
+                "dynamodb": false
+            }
+        },
+        "azure": {
+            "name": "Microsoft Azure",
+            "active": false,
+            "default": false,
+            "fallback": true,
+            "credentials": {
+                "connection_string": "",
+                "tenant_id": "",
+                "client_id": "",
+                "client_secret": ""
+            },
+            "services": {
+                "functions": true,
+                "blob_storage": true,
+                "cosmos_db": false
+            }
+        },
+        "gcp": {
+            "name": "Google Cloud Platform",
+            "active": false,
+            "default": false,
+            "fallback": false,
+            "credentials": {
+                "project_id": "",
+                "service_account_key": ""
+            },
+            "services": {
+                "cloud_functions": true,
+                "cloud_storage": true,
+                "bigquery": false
+            }
+        }
+    },
+    "settings": {
+        "default_provider": "aws",
+        "fallback_provider": "azure",
+        "timeout": 30,
+        "max_retries": 3,
+        "parallel_execution": true,
+        "load_balancing": "round-robin"
+    }
+}

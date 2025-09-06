@@ -1,0 +1,10 @@
+[
+  {
+    "role": "user",
+    "content": "qual é o preço do produto 661912"
+  },
+  {
+    "role": "assistant",
+    "content": "O produto 661912 (Nome do Produto) tem o preço de R$ 99,90."
+  }
+]

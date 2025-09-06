@@ -1,0 +1,207 @@
+{
+  "database": {
+    "name": "Projeto_Opcom",
+    "tables": [
+      {
+        "schema": "dbo",
+        "name": "Opcom",
+        "columns": [
+          {
+            "name": "id_Opcom",
+            "type": "int",
+            "nullable": false
+          },
+          {
+            "name": "Une",
+            "type": "varchar",
+            "nullable": true
+          }
+        ]
+      },
+      {
+        "schema": "dbo",
+        "name": "Admat_OPCOM",
+        "columns": [
+          {
+            "name": "CÓDIGO",
+            "type": "float",
+            "nullable": true
+          },
+          {
+            "name": "SUBSTITUTOS",
+            "type": "nvarchar",
+            "nullable": true
+          },
+          {
+            "name": "NOME",
+            "type": "nvarchar",
+            "nullable": true
+          },
+          {
+            "name": "FABRICANTE",
+            "type": "nvarchar",
+            "nullable": true
+          },
+          {
+            "name": "EMBALAGEM",
+            "type": "nvarchar",
+            "nullable": true
+          },
+          {
+            "name": "PREÇO 38%",
+            "type": "money",
+            "nullable": true
+          },
+          {
+            "name": "MST C/",
+            "type": "float",
+            "nullable": true
+          },
+          {
+            "name": "MUL C/",
+            "type": "float",
+            "nullable": true
+          },
+          {
+            "name": "VAREJO",
+            "type": "nvarchar",
+            "nullable": true
+          },
+          {
+            "name": "EM LINHA",
+            "type": "nvarchar",
+            "nullable": true
+          },
+          {
+            "name": "COMPRADOR",
+            "type": "nvarchar",
+            "nullable": true
+          },
+          {
+            "name": "ECOM",
+            "type": "nvarchar",
+            "nullable": true
+          },
+          {
+            "name": "ARRED_MULT",
+            "type": "nvarchar",
+            "nullable": true
+          },
+          {
+            "name": "SEGMENTO",
+            "type": "nvarchar",
+            "nullable": true
+          },
+          {
+            "name": "CATEGORIA",
+            "type": "nvarchar",
+            "nullable": true
+          },
+          {
+            "name": "GRUPO",
+            "type": "nvarchar",
+            "nullable": true
+          },
+          {
+            "name": "SUBGRUPO",
+            "type": "nvarchar",
+            "nullable": true
+          },
+          {
+            "name": "END# MAPA UNE",
+            "type": "nvarchar",
+            "nullable": true
+          },
+          {
+            "name": "END# MAPA UNE1",
+            "type": "nvarchar",
+            "nullable": true
+          },
+          {
+            "name": "ULT# LOCALIZAÇÃO",
+            "type": "nvarchar",
+            "nullable": true
+          },
+          {
+            "name": "EM PROMO",
+            "type": "nvarchar",
+            "nullable": true
+          },
+          {
+            "name": "INICIO PROMO",
+            "type": "nvarchar",
+            "nullable": true
+          },
+          {
+            "name": "FIM PROMO",
+            "type": "nvarchar",
+            "nullable": true
+          },
+          {
+            "name": "PREÇO ANTERIOR",
+            "type": "money",
+            "nullable": true
+          },
+          {
+            "name": "DESCONTO",
+            "type": "nvarchar",
+            "nullable": true
+          },
+          {
+            "name": "SOLICITAÇÃO DE PREÇO",
+            "type": "nvarchar",
+            "nullable": true
+          },
+          {
+            "name": "COMENTÁRIO",
+            "type": "float",
+            "nullable": true
+          },
+          {
+            "name": "VENDA 30D",
+            "type": "money",
+            "nullable": true
+          },
+          {
+            "name": "VALOR EST#",
+            "type": "money",
+            "nullable": true
+          },
+          {
+            "name": "ULTIMA_VENDA",
+            "type": "datetime",
+            "nullable": true
+          },
+          {
+            "name": "VEND# QTD 30D",
+            "type": "float",
+            "nullable": true
+          },
+          {
+            "name": "EST# UNE",
+            "type": "float",
+            "nullable": true
+          },
+          {
+            "name": "EST# LV",
+            "type": "float",
+            "nullable": true
+          },
+          {
+            "name": "EAN",
+            "type": "nvarchar",
+            "nullable": true
+          }
+        ]
+      }
+    ],
+    "relations": []
+  },
+  "queries": {
+    "get_product_by_code": "SELECT CÓDIGO as codigo, NOME as nome, FABRICANTE as fabricante, EMBALAGEM as embalagem, [PREÇO 38%] as preco, CATEGORIA as categoria, GRUPO as grupo, SUBGRUPO as subgrupo, [EST# UNE] as estoque, ULTIMA_VENDA as ultima_venda FROM dbo.Admat_OPCOM WHERE CÓDIGO = ?",
+    "get_product_by_name": "SELECT TOP 5 CÓDIGO as codigo, NOME as nome, FABRICANTE as fabricante, EMBALAGEM as embalagem, [PREÇO 38%] as preco, CATEGORIA as categoria, GRUPO as grupo, SUBGRUPO as subgrupo, [EST# UNE] as estoque, ULTIMA_VENDA as ultima_venda FROM dbo.Admat_OPCOM WHERE NOME LIKE ? ORDER BY [VEND# QTD 30D] DESC",
+    "get_products_by_category": "SELECT TOP 10 CÓDIGO as codigo, NOME as nome, [PREÇO 38%] as preco, [VEND# QTD 30D] as vendas_30d FROM dbo.Admat_OPCOM WHERE CATEGORIA = ? ORDER BY [VEND# QTD 30D] DESC",
+    "get_top_selling_products": "SELECT TOP 10 CÓDIGO as codigo, NOME as nome, [VEND# QTD 30D] as vendas_30d, [PREÇO 38%] as preco FROM dbo.Admat_OPCOM ORDER BY [VEND# QTD 30D] DESC",
+    "get_product_sales_history": "SELECT CÓDIGO as codigo, NOME as nome, [mai-23] as mai23, [jun-23] as jun23, [jul-23] as jul23, [ago-23] as ago23, [set-23] as set23, [out-23] as out23, [nov-23] as nov23, [dez-23] as dez23, [jan-24] as jan24, [fev-24] as fev24, [mar-24] as mar24, [abr-24] as abr24, [mai/24] as mai24 FROM dbo.Admat_OPCOM WHERE CÓDIGO = ?"
+  }
+}

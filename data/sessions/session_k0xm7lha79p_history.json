@@ -1,0 +1,10 @@
+[
+  {
+    "role": "user",
+    "content": "qual é o preço do produto 661912"
+  },
+  {
+    "role": "assistant",
+    "content": "Para encontrar o preço do produto com o código 661912, você pode usar a seguinte consulta SQL:\n\n```sql\nSELECT \n    NOME, \n    [PREÇO 38%] as PRECO\nFROM \n    dbo.Admat_OPCOM\nWHERE \n    CÓDIGO = 661912;\n```\n\nAgora você pode executar essa consulta para obter o resultado."
+  }
+]

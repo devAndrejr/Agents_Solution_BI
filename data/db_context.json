@@ -1,0 +1,845 @@
+{
+  "tables": [
+    {
+      "name": "Admat_OPCOM",
+      "schema": "dbo",
+      "columns": [
+        {
+          "name": "CÓDIGO",
+          "type": "float",
+          "nullable": true,
+          "primary_key": false
+        },
+        {
+          "name": "SUBSTITUTOS",
+          "type": "nvarchar",
+          "nullable": true,
+          "primary_key": false
+        },
+        {
+          "name": "NOME",
+          "type": "nvarchar",
+          "nullable": true,
+          "primary_key": false
+        },
+        {
+          "name": "FABRICANTE",
+          "type": "nvarchar",
+          "nullable": true,
+          "primary_key": false
+        },
+        {
+          "name": "EMBALAGEM",
+          "type": "nvarchar",
+          "nullable": true,
+          "primary_key": false
+        },
+        {
+          "name": "PREÇO 38%",
+          "type": "money",
+          "nullable": true,
+          "primary_key": false
+        },
+        {
+          "name": "MST C/",
+          "type": "float",
+          "nullable": true,
+          "primary_key": false
+        },
+        {
+          "name": "MUL C/",
+          "type": "float",
+          "nullable": true,
+          "primary_key": false
+        },
+        {
+          "name": "VAREJO",
+          "type": "nvarchar",
+          "nullable": true,
+          "primary_key": false
+        },
+        {
+          "name": "EM LINHA",
+          "type": "nvarchar",
+          "nullable": true,
+          "primary_key": false
+        },
+        {
+          "name": "COMPRADOR",
+          "type": "nvarchar",
+          "nullable": true,
+          "primary_key": false
+        },
+        {
+          "name": "ECOM",
+          "type": "nvarchar",
+          "nullable": true,
+          "primary_key": false
+        },
+        {
+          "name": "ARRED_MULT",
+          "type": "nvarchar",
+          "nullable": true,
+          "primary_key": false
+        },
+        {
+          "name": "SEGMENTO",
+          "type": "nvarchar",
+          "nullable": true,
+          "primary_key": false
+        },
+        {
+          "name": "CATEGORIA",
+          "type": "nvarchar",
+          "nullable": true,
+          "primary_key": false
+        },
+        {
+          "name": "GRUPO",
+          "type": "nvarchar",
+          "nullable": true,
+          "primary_key": false
+        },
+        {
+          "name": "SUBGRUPO",
+          "type": "nvarchar",
+          "nullable": true,
+          "primary_key": false
+        },
+        {
+          "name": "END# MAPA UNE",
+          "type": "nvarchar",
+          "nullable": true,
+          "primary_key": false
+        },
+        {
+          "name": "END# MAPA UNE1",
+          "type": "nvarchar",
+          "nullable": true,
+          "primary_key": false
+        },
+        {
+          "name": "ULT# LOCALIZAÇÃO",
+          "type": "nvarchar",
+          "nullable": true,
+          "primary_key": false
+        },
+        {
+          "name": "EM PROMO",
+          "type": "nvarchar",
+          "nullable": true,
+          "primary_key": false
+        },
+        {
+          "name": "INICIO PROMO",
+          "type": "nvarchar",
+          "nullable": true,
+          "primary_key": false
+        },
+        {
+          "name": "FIM PROMO",
+          "type": "nvarchar",
+          "nullable": true,
+          "primary_key": false
+        },
+        {
+          "name": "PREÇO ANTERIOR",
+          "type": "money",
+          "nullable": true,
+          "primary_key": false
+        },
+        {
+          "name": "DESCONTO",
+          "type": "nvarchar",
+          "nullable": true,
+          "primary_key": false
+        },
+        {
+          "name": "SOLICITAÇÃO DE PREÇO",
+          "type": "nvarchar",
+          "nullable": true,
+          "primary_key": false
+        },
+        {
+          "name": "COMENTÁRIO",
+          "type": "float",
+          "nullable": true,
+          "primary_key": false
+        },
+        {
+          "name": "VENDA 30D",
+          "type": "money",
+          "nullable": true,
+          "primary_key": false
+        },
+        {
+          "name": "VALOR EST#",
+          "type": "money",
+          "nullable": true,
+          "primary_key": false
+        },
+        {
+          "name": "ABC JAN",
+          "type": "nvarchar",
+          "nullable": true,
+          "primary_key": false
+        },
+        {
+          "name": "ABC FEV",
+          "type": "nvarchar",
+          "nullable": true,
+          "primary_key": false
+        },
+        {
+          "name": "ABC MAR",
+          "type": "nvarchar",
+          "nullable": true,
+          "primary_key": false
+        },
+        {
+          "name": "ABC ABR",
+          "type": "nvarchar",
+          "nullable": true,
+          "primary_key": false
+        },
+        {
+          "name": "ABC LOJA 30D",
+          "type": "nvarchar",
+          "nullable": true,
+          "primary_key": false
+        },
+        {
+          "name": "ABC GRUPO 90D",
+          "type": "nvarchar",
+          "nullable": true,
+          "primary_key": false
+        },
+        {
+          "name": "COMPARAÇÃO",
+          "type": "nvarchar",
+          "nullable": true,
+          "primary_key": false
+        },
+        {
+          "name": "RANK GRUPO TOP 100 SEG (30d)",
+          "type": "float",
+          "nullable": true,
+          "primary_key": false
+        },
+        {
+          "name": "mai-23",
+          "type": "float",
+          "nullable": true,
+          "primary_key": false
+        },
+        {
+          "name": "jun-23",
+          "type": "float",
+          "nullable": true,
+          "primary_key": false
+        },
+        {
+          "name": "jul-23",
+          "type": "float",
+          "nullable": true,
+          "primary_key": false
+        },
+        {
+          "name": "ago-23",
+          "type": "float",
+          "nullable": true,
+          "primary_key": false
+        },
+        {
+          "name": "set-23",
+          "type": "float",
+          "nullable": true,
+          "primary_key": false
+        },
+        {
+          "name": "out-23",
+          "type": "float",
+          "nullable": true,
+          "primary_key": false
+        },
+        {
+          "name": "nov-23",
+          "type": "float",
+          "nullable": true,
+          "primary_key": false
+        },
+        {
+          "name": "dez-23",
+          "type": "float",
+          "nullable": true,
+          "primary_key": false
+        },
+        {
+          "name": "jan-24",
+          "type": "float",
+          "nullable": true,
+          "primary_key": false
+        },
+        {
+          "name": "fev-24",
+          "type": "float",
+          "nullable": true,
+          "primary_key": false
+        },
+        {
+          "name": "mar-24",
+          "type": "float",
+          "nullable": true,
+          "primary_key": false
+        },
+        {
+          "name": "abr-24",
+          "type": "float",
+          "nullable": true,
+          "primary_key": false
+        },
+        {
+          "name": "mai/24",
+          "type": "float",
+          "nullable": true,
+          "primary_key": false
+        },
+        {
+          "name": "QDT",
+          "type": "float",
+          "nullable": true,
+          "primary_key": false
+        },
+        {
+          "name": "FRQ",
+          "type": "float",
+          "nullable": true,
+          "primary_key": false
+        },
+        {
+          "name": "CM",
+          "type": "float",
+          "nullable": true,
+          "primary_key": false
+        },
+        {
+          "name": "QDT1",
+          "type": "float",
+          "nullable": true,
+          "primary_key": false
+        },
+        {
+          "name": "FRQ1",
+          "type": "float",
+          "nullable": true,
+          "primary_key": false
+        },
+        {
+          "name": "CM1",
+          "type": "float",
+          "nullable": true,
+          "primary_key": false
+        },
+        {
+          "name": "QDT2",
+          "type": "float",
+          "nullable": true,
+          "primary_key": false
+        },
+        {
+          "name": "FRQ2",
+          "type": "float",
+          "nullable": true,
+          "primary_key": false
+        },
+        {
+          "name": "CM2",
+          "type": "float",
+          "nullable": true,
+          "primary_key": false
+        },
+        {
+          "name": "QDT3",
+          "type": "float",
+          "nullable": true,
+          "primary_key": false
+        },
+        {
+          "name": "FRQ3",
+          "type": "float",
+          "nullable": true,
+          "primary_key": false
+        },
+        {
+          "name": "CM3",
+          "type": "float",
+          "nullable": true,
+          "primary_key": false
+        },
+        {
+          "name": "QDT4",
+          "type": "float",
+          "nullable": true,
+          "primary_key": false
+        },
+        {
+          "name": "FRQ4",
+          "type": "float",
+          "nullable": true,
+          "primary_key": false
+        },
+        {
+          "name": "CM4",
+          "type": "float",
+          "nullable": true,
+          "primary_key": false
+        },
+        {
+          "name": "FREQ ULT# SEM",
+          "type": "nvarchar",
+          "nullable": true,
+          "primary_key": false
+        },
+        {
+          "name": "VND# CONCENTR",
+          "type": "nvarchar",
+          "nullable": true,
+          "primary_key": false
+        },
+        {
+          "name": "F68",
+          "type": "float",
+          "nullable": true,
+          "primary_key": false
+        },
+        {
+          "name": "F69",
+          "type": "float",
+          "nullable": true,
+          "primary_key": false
+        },
+        {
+          "name": "F70",
+          "type": "float",
+          "nullable": true,
+          "primary_key": false
+        },
+        {
+          "name": "F71",
+          "type": "float",
+          "nullable": true,
+          "primary_key": false
+        },
+        {
+          "name": "F72",
+          "type": "float",
+          "nullable": true,
+          "primary_key": false
+        },
+        {
+          "name": "F73",
+          "type": "float",
+          "nullable": true,
+          "primary_key": false
+        },
+        {
+          "name": "F74",
+          "type": "float",
+          "nullable": true,
+          "primary_key": false
+        },
+        {
+          "name": "ULTIMA_VENDA",
+          "type": "datetime",
+          "nullable": true,
+          "primary_key": false
+        },
+        {
+          "name": "VEND# QTD 30D",
+          "type": "float",
+          "nullable": true,
+          "primary_key": false
+        },
+        {
+          "name": "M#C",
+          "type": "float",
+          "nullable": true,
+          "primary_key": false
+        },
+        {
+          "name": "MC REAL",
+          "type": "float",
+          "nullable": true,
+          "primary_key": false
+        },
+        {
+          "name": "EFEITO CHICOTE (+-20%)",
+          "type": "nvarchar",
+          "nullable": true,
+          "primary_key": false
+        },
+        {
+          "name": "EST# CD",
+          "type": "float",
+          "nullable": true,
+          "primary_key": false
+        },
+        {
+          "name": "ULT# ENT# CD",
+          "type": "datetime",
+          "nullable": true,
+          "primary_key": false
+        },
+        {
+          "name": "OC",
+          "type": "float",
+          "nullable": true,
+          "primary_key": false
+        },
+        {
+          "name": "EC",
+          "type": "float",
+          "nullable": true,
+          "primary_key": false
+        },
+        {
+          "name": "EST# UNE",
+          "type": "float",
+          "nullable": true,
+          "primary_key": false
+        },
+        {
+          "name": "ULT# ENT# UNE",
+          "type": "datetime",
+          "nullable": true,
+          "primary_key": false
+        },
+        {
+          "name": "EST# UNE DIAS",
+          "type": "float",
+          "nullable": true,
+          "primary_key": false
+        },
+        {
+          "name": "EST# LV",
+          "type": "float",
+          "nullable": true,
+          "primary_key": false
+        },
+        {
+          "name": "EST#GON",
+          "type": "float",
+          "nullable": true,
+          "primary_key": false
+        },
+        {
+          "name": "EST# ILHA",
+          "type": "float",
+          "nullable": true,
+          "primary_key": false
+        },
+        {
+          "name": "EST# MÁX# LV",
+          "type": "float",
+          "nullable": true,
+          "primary_key": false
+        },
+        {
+          "name": "LV/MC",
+          "type": "float",
+          "nullable": true,
+          "primary_key": false
+        },
+        {
+          "name": "STATUS LV",
+          "type": "nvarchar",
+          "nullable": true,
+          "primary_key": false
+        },
+        {
+          "name": "AJUSTE LV",
+          "type": "nvarchar",
+          "nullable": true,
+          "primary_key": false
+        },
+        {
+          "name": "EXPO# MIN",
+          "type": "nvarchar",
+          "nullable": true,
+          "primary_key": false
+        },
+        {
+          "name": "% EST/LV",
+          "type": "float",
+          "nullable": true,
+          "primary_key": false
+        },
+        {
+          "name": "TOTAL ALTERADO (R$)",
+          "type": "nvarchar",
+          "nullable": true,
+          "primary_key": false
+        },
+        {
+          "name": "TRAVA",
+          "type": "nvarchar",
+          "nullable": true,
+          "primary_key": false
+        },
+        {
+          "name": "END# GÔNDO",
+          "type": "nvarchar",
+          "nullable": true,
+          "primary_key": false
+        },
+        {
+          "name": "PP",
+          "type": "float",
+          "nullable": true,
+          "primary_key": false
+        },
+        {
+          "name": "LT",
+          "type": "float",
+          "nullable": true,
+          "primary_key": false
+        },
+        {
+          "name": "END# ESTOQUE",
+          "type": "nvarchar",
+          "nullable": true,
+          "primary_key": false
+        },
+        {
+          "name": "ULT# VISTA LVERDE",
+          "type": "datetime",
+          "nullable": true,
+          "primary_key": false
+        },
+        {
+          "name": "ULT# ALTERA LVERDE",
+          "type": "datetime",
+          "nullable": true,
+          "primary_key": false
+        },
+        {
+          "name": "E#GON ANT#",
+          "type": "float",
+          "nullable": true,
+          "primary_key": false
+        },
+        {
+          "name": "% ALTER#",
+          "type": "float",
+          "nullable": true,
+          "primary_key": false
+        },
+        {
+          "name": "USUARIO ALTERAÇÃO",
+          "type": "nvarchar",
+          "nullable": true,
+          "primary_key": false
+        },
+        {
+          "name": "ULT# AUDITORIA PDV",
+          "type": "datetime",
+          "nullable": true,
+          "primary_key": false
+        },
+        {
+          "name": "ROTINA",
+          "type": "nvarchar",
+          "nullable": true,
+          "primary_key": false
+        },
+        {
+          "name": "STATUS AUDITORIA",
+          "type": "nvarchar",
+          "nullable": true,
+          "primary_key": false
+        },
+        {
+          "name": "SOLICITAÇÃO",
+          "type": "nvarchar",
+          "nullable": true,
+          "primary_key": false
+        },
+        {
+          "name": "QTD SOL",
+          "type": "nvarchar",
+          "nullable": true,
+          "primary_key": false
+        },
+        {
+          "name": "DATA SOL",
+          "type": "nvarchar",
+          "nullable": true,
+          "primary_key": false
+        },
+        {
+          "name": "STATUS",
+          "type": "nvarchar",
+          "nullable": true,
+          "primary_key": false
+        },
+        {
+          "name": "ULT# ENT UNE",
+          "type": "datetime",
+          "nullable": true,
+          "primary_key": false
+        },
+        {
+          "name": "QTD ULT ENTRADA",
+          "type": "float",
+          "nullable": true,
+          "primary_key": false
+        },
+        {
+          "name": "DIAS EM ATEND#",
+          "type": "nvarchar",
+          "nullable": true,
+          "primary_key": false
+        },
+        {
+          "name": "DATA INVENTÁRIO BI",
+          "type": "nvarchar",
+          "nullable": true,
+          "primary_key": false
+        },
+        {
+          "name": "DIAS INV BI",
+          "type": "nvarchar",
+          "nullable": true,
+          "primary_key": false
+        },
+        {
+          "name": "EAN",
+          "type": "nvarchar",
+          "nullable": true,
+          "primary_key": false
+        },
+        {
+          "name": "PICKLIST",
+          "type": "float",
+          "nullable": true,
+          "primary_key": false
+        },
+        {
+          "name": "ST PICK",
+          "type": "nvarchar",
+          "nullable": true,
+          "primary_key": false
+        },
+        {
+          "name": "DATA CONFERÊNCIA",
+          "type": "datetime",
+          "nullable": true,
+          "primary_key": false
+        },
+        {
+          "name": "QTD VOL",
+          "type": "float",
+          "nullable": true,
+          "primary_key": false
+        },
+        {
+          "name": "ULT VOL",
+          "type": "float",
+          "nullable": true,
+          "primary_key": false
+        },
+        {
+          "name": "ROMANEIO SOLICITA",
+          "type": "float",
+          "nullable": true,
+          "primary_key": false
+        },
+        {
+          "name": "ROMANEIO ENVIO",
+          "type": "float",
+          "nullable": true,
+          "primary_key": false
+        },
+        {
+          "name": "NOTA ENVIO",
+          "type": "float",
+          "nullable": true,
+          "primary_key": false
+        },
+        {
+          "name": "S",
+          "type": "float",
+          "nullable": true,
+          "primary_key": false
+        },
+        {
+          "name": "EMISSAO NOTA",
+          "type": "datetime",
+          "nullable": true,
+          "primary_key": false
+        },
+        {
+          "name": "MD12",
+          "type": "float",
+          "nullable": true,
+          "primary_key": false
+        },
+        {
+          "name": "MD3",
+          "type": "float",
+          "nullable": true,
+          "primary_key": false
+        },
+        {
+          "name": "MD1",
+          "type": "float",
+          "nullable": true,
+          "primary_key": false
+        },
+        {
+          "name": "LISTAGEM",
+          "type": "float",
+          "nullable": true,
+          "primary_key": false
+        },
+        {
+          "name": "LISTAGEM_QUALIDADE",
+          "type": "nvarchar",
+          "nullable": true,
+          "primary_key": false
+        },
+        {
+          "name": "ENDEREÇO LIN CD",
+          "type": "nvarchar",
+          "nullable": true,
+          "primary_key": false
+        },
+        {
+          "name": "ENDEREÇO RESERVA CD",
+          "type": "nvarchar",
+          "nullable": true,
+          "primary_key": false
+        }
+      ]
+    },
+    {
+      "name": "Opcom",
+      "schema": "dbo",
+      "columns": [
+        {
+          "name": "id_Opcom",
+          "type": "int",
+          "nullable": false,
+          "primary_key": true
+        },
+        {
+          "name": "Une",
+          "type": "varchar",
+          "nullable": true,
+          "primary_key": false
+        }
+      ]
+    }
+  ],
+  "relationships": []
+}
