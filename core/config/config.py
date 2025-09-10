@@ -23,8 +23,8 @@ class Config:
         )
 
     # Configurações do banco de dados
-    DB_SERVER = os.getenv("DB_SERVER", "localhost")
-    DB_DATABASE = os.getenv("DB_DATABASE", "nome_do_banco")
+    DB_SERVER = os.getenv("DB_HOST", "localhost")
+    DB_DATABASE = os.getenv("DB_NAME", "nome_do_banco")
     DB_USER = os.getenv("DB_USER", "usuario")
     DB_PASSWORD = os.getenv("DB_PASSWORD", "senha")
     DB_PORT = os.getenv("DB_PORT", "1433")

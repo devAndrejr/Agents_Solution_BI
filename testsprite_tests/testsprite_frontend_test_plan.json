@@ -1,0 +1,530 @@
+[
+  {
+    "id": "TC001",
+    "title": "User Login Success",
+    "description": "Verify that a user can log in successfully with valid credentials and the system correctly establishes their role.",
+    "category": "functional",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to the login page."
+      },
+      {
+        "type": "action",
+        "description": "Enter valid username and password."
+      },
+      {
+        "type": "action",
+        "description": "Click the login button."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify that login is successful."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify that the user role (admin, manager, buyer) is correctly established and reflected in the session."
+      }
+    ]
+  },
+  {
+    "id": "TC002",
+    "title": "User Login Failure with Invalid Credentials",
+    "description": "Verify that the system rejects login attempts with invalid username or password and displays an appropriate error message.",
+    "category": "error handling",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to the login page."
+      },
+      {
+        "type": "action",
+        "description": "Enter invalid username and/or password."
+      },
+      {
+        "type": "action",
+        "description": "Click the login button."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify that login is denied."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify that an error message indicating invalid credentials is displayed."
+      }
+    ]
+  },
+  {
+    "id": "TC003",
+    "title": "Natural Language Query Successful Processing",
+    "description": "Verify that the conversational agent processes valid Portuguese natural language queries correctly and returns accurate textual or visual responses.",
+    "category": "functional",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Log in as a manager user."
+      },
+      {
+        "type": "action",
+        "description": "Enter a valid, complex Portuguese natural language query into the conversational agent."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the query is processed successfully with response accuracy above 95%."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the system displays an accurate textual answer or renders the appropriate visualization (chart or table) based on the query."
+      }
+    ]
+  },
+  {
+    "id": "TC004",
+    "title": "Natural Language Query Handling of Unsupported or Ambiguous Queries",
+    "description": "Verify that the conversational agent handles unsupported, ambiguous, or malformed Portuguese queries gracefully by providing meaningful error or clarification messages.",
+    "category": "error handling",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Log in as a manager user."
+      },
+      {
+        "type": "action",
+        "description": "Enter an ambiguous or unsupported Portuguese natural language query into the conversational agent."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify that the system does not crash or hang."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify that a meaningful error or clarification message is displayed to the user."
+      }
+    ]
+  },
+  {
+    "id": "TC005",
+    "title": "Dashboard Loading Time Performance",
+    "description": "Verify that the main dashboard loads and displays all key corporate KPIs within 5 seconds under typical usage conditions.",
+    "category": "performance",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Log in as a manager user."
+      },
+      {
+        "type": "action",
+        "description": "Navigate to the main dashboard."
+      },
+      {
+        "type": "assertion",
+        "description": "Measure and verify that the dashboard and all KPI visualizations load completely within 5 seconds."
+      }
+    ]
+  },
+  {
+    "id": "TC006",
+    "title": "Interactive Dashboard Filtering and Sorting",
+    "description": "Verify users can apply filters and sorting on dashboard data and the visualizations update correctly in real-time.",
+    "category": "functional",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Log in as a manager user."
+      },
+      {
+        "type": "action",
+        "description": "Navigate to an interactive dashboard with filtering and sorting features."
+      },
+      {
+        "type": "action",
+        "description": "Apply data filters using provided UI controls."
+      },
+      {
+        "type": "action",
+        "description": "Apply sorting on dashboard tables or charts."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify that the visualizations update correctly reflecting the filtered and sorted data."
+      }
+    ]
+  },
+  {
+    "id": "TC007",
+    "title": "Drill-Down Capability in Dashboards",
+    "description": "Verify that users can drill-down into dashboard data points to explore detailed data without errors and with relevant data shown.",
+    "category": "functional",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Log in as a manager user."
+      },
+      {
+        "type": "action",
+        "description": "Open a dashboard with drill-down enabled charts."
+      },
+      {
+        "type": "action",
+        "description": "Perform drill-down action on a chart data point."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify that the system displays detailed data related to the selected data point."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify no visual or performance issues occur during drill-down."
+      }
+    ]
+  },
+  {
+    "id": "TC008",
+    "title": "Role-Based Access Control Enforcement",
+    "description": "Verify that access control policies restrict users based on their roles (admin, manager, buyer) to the correct features and data.",
+    "category": "security",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Log in as an admin user."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify admin can access all features including pipeline monitoring, metadata catalog management, and user management."
+      },
+      {
+        "type": "action",
+        "description": "Log out and log in as a manager user."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify manager can access conversational agent, dashboards, and filtering but not admin-only features."
+      },
+      {
+        "type": "action",
+        "description": "Log out and log in as a buyer user."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify buyer has access to permitted dashboards and conversational queries but restricted from admin and manager features."
+      }
+    ]
+  },
+  {
+    "id": "TC009",
+    "title": "Pipeline Monitoring Interface Functionality",
+    "description": "Verify that the pipeline monitoring interface accurately displays data integration status, health metrics, and alerts to administrators.",
+    "category": "functional",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Log in as an admin user."
+      },
+      {
+        "type": "action",
+        "description": "Open the pipeline monitoring interface."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify display of correct pipeline statuses, error alerts, and integration health metrics."
+      },
+      {
+        "type": "action",
+        "description": "Simulate a pipeline error scenario."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify that the interface updates to reflect pipeline failures and alerts."
+      }
+    ]
+  },
+  {
+    "id": "TC010",
+    "title": "Metadata Catalog Management by Admin",
+    "description": "Verify that administrators can add, modify, enrich, and approve metadata entries in the metadata catalog correctly.",
+    "category": "functional",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Log in as an admin user."
+      },
+      {
+        "type": "action",
+        "description": "Navigate to the metadata catalog management panel."
+      },
+      {
+        "type": "action",
+        "description": "Add a new metadata entry with business context data."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify that the new metadata entry is saved and visible in the catalog."
+      },
+      {
+        "type": "action",
+        "description": "Modify an existing metadata entry."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify that modifications are saved and reflected correctly."
+      },
+      {
+        "type": "action",
+        "description": "Approve a pending metadata entry."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the approved status is updated and affects data context properly."
+      }
+    ]
+  },
+  {
+    "id": "TC011",
+    "title": "Visualization Generation for Different Chart Types",
+    "description": "Verify that the system dynamically generates bar charts, line charts, and pie charts correctly based on user requests through natural language queries.",
+    "category": "functional",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Log in as a manager user."
+      },
+      {
+        "type": "action",
+        "description": "Submit natural language queries requesting bar charts, line charts, and pie charts respectively."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify each requested chart type is generated correctly with accurate and consistent data representation."
+      }
+    ]
+  },
+  {
+    "id": "TC012",
+    "title": "Conversation History Review",
+    "description": "Verify that users can access and review their past queries and the corresponding insights in the conversation history interface.",
+    "category": "functional",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Log in as any user."
+      },
+      {
+        "type": "action",
+        "description": "Make several natural language queries with the conversational agent."
+      },
+      {
+        "type": "action",
+        "description": "Navigate to the conversation history section."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify that all previous queries and their corresponding textual and visual responses are correctly listed and accessible."
+      }
+    ]
+  },
+  {
+    "id": "TC013",
+    "title": "System Uptime Monitoring Compliance",
+    "description": "Verify that system uptime meets or exceeds 99.9% as monitored and reported by production monitoring tools over a sustained period.",
+    "category": "performance",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Review system uptime metrics from production monitoring tools over at least 7 consecutive days."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify that uptime is equal or greater than 99.9%."
+      }
+    ]
+  },
+  {
+    "id": "TC014",
+    "title": "Security Vulnerability Scan - OWASP Top 10",
+    "description": "Perform automated security scans to ensure that the system is protected against OWASP Top 10 vulnerabilities, including injection, authentication flaws, and XSS.",
+    "category": "security",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Run automated OWASP Top 10 vulnerability scans against authentication, API endpoints, and UI components."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify that no critical or high severity OWASP Top 10 vulnerabilities are detected."
+      }
+    ]
+  },
+  {
+    "id": "TC015",
+    "title": "User Feedback Usability Check",
+    "description": "Verify through user feedback surveys and observation that the interface is easy to use, intuitive, and requires minimal training.",
+    "category": "ui",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Collect user feedback after training and usage through surveys and interviews."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify that the majority of users report positive usability experience with minimal required training."
+      }
+    ]
+  },
+  {
+    "id": "TC016",
+    "title": "API Backend Query Processing Robustness",
+    "description": "Verify that the backend APIs handle typical and edge case natural language query requests accurately and efficiently, returning correct responses or errors.",
+    "category": "functional",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Send a variety of typical valid natural language query requests to the backend API."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify correct processing and response content."
+      },
+      {
+        "type": "action",
+        "description": "Send malformed or unsupported query requests to the backend API."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the API returns informative error responses without crashing."
+      }
+    ]
+  },
+  {
+    "id": "TC017",
+    "title": "Authentication and Session Security",
+    "description": "Verify secure login and session management, ensuring password protection and session expiry policies are enforced correctly.",
+    "category": "security",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Attempt login with valid credentials and inspect session tokens."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify session tokens are securely generated and stored."
+      },
+      {
+        "type": "action",
+        "description": "Attempt login with incorrect passwords multiple times."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify account lockout or throttling mechanisms are triggered as per security policy."
+      },
+      {
+        "type": "action",
+        "description": "Verify session expires automatically after inactivity timeout."
+      }
+    ]
+  },
+  {
+    "id": "TC018",
+    "title": "Data Pipeline ETL Integrity",
+    "description": "Verify that data extraction, transformation, and loading processes from SQL Server to Parquet files execute successfully and maintain data integrity.",
+    "category": "functional",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Trigger the data pipeline ETL process."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify no errors during ETL execution."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify that data in Parquet files matches source SQL Server data in terms of record counts and values."
+      }
+    ]
+  },
+  {
+    "id": "TC019",
+    "title": "Logging and Error Monitoring",
+    "description": "Verify that all key system activities and errors are properly logged using the structured logging system and errors are monitored correctly.",
+    "category": "functional",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Perform normal user activities including logins, queries, and dashboard access."
+      },
+      {
+        "type": "action",
+        "description": "Force some error conditions (e.g., query failure, invalid input)."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify that all activities and errors are logged with correct detail in logs."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify that monitoring alerts are raised for critical errors."
+      }
+    ]
+  },
+  {
+    "id": "TC020",
+    "title": "Administration Panel User and Role Management",
+    "description": "Verify that administrators can add, modify, assign roles, and delete user accounts correctly through the administration panel.",
+    "category": "functional",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Log in as admin user."
+      },
+      {
+        "type": "action",
+        "description": "Navigate to the administration panel."
+      },
+      {
+        "type": "action",
+        "description": "Create a new user account and assign roles."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the new user account is created with correct roles."
+      },
+      {
+        "type": "action",
+        "description": "Modify an existing user’s roles."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify roles are updated and enforced."
+      },
+      {
+        "type": "action",
+        "description": "Delete a user account."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the user account is removed and login is no longer possible."
+      }
+    ]
+  }
+]

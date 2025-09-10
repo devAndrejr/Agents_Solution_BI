@@ -1,0 +1,39 @@
+Você é um programador sênior especialista em Python, LangChain e na criação de agentes de IA com ferramentas.
+
+Estou a desenvolver um agente de BI que utiliza um grafo (LangGraph) e ferramentas. Uma das ferramentas, chamada `generate_and_execute_python_code`, gera e executa código Python para criar visualizações de dados, como gráficos.
+
+**O Problema:**
+
+A ferramenta está a funcionar perfeitamente. [cite_start]Conforme o log[cite: 119, 121, 150], quando peço um gráfico, a ferramenta executa o código e retorna corretamente um objeto de gráfico Plotly. A `ToolMessage` final que retorna ao meu agente principal contém o seguinte:
+
+[cite_start]`'content': "{'type': 'chart', 'output': Figure({...})}"` [cite: 120, 127]
+
+No entanto, o meu agente principal não sabe como interpretar este resultado. Ele trata-o como texto e envia ao utilizador uma mensagem de erro inútil:
+
+[cite_start]`"Saída de ferramenta desconhecida: generate_and_execute_python_code - {'type': 'chart', 'output': Figure({...})}"` [cite: 123, 131]
+
+**O meu Objetivo:**
+
+Preciso de ajuda para modificar a lógica final do meu agente, que processa a resposta antes de a enviar para a interface do Streamlit. A lógica precisa de ser capaz de:
+
+1.  Identificar que o resultado de uma `ToolMessage` é um dicionário contendo `'type': 'chart'`.
+2.  Extrair o objeto `Figure` do Plotly que está na chave `'output'`.
+3.  Devolver este objeto de uma forma que a minha interface do Streamlit possa recebê-lo e exibi-lo com `st.plotly_chart()`.
+
+**O meu Código (Simplificado):**
+
+A parte do meu código que processa a resposta final é parecida com isto, e é aqui que preciso de ajuda para a modificar:
+
+```python
+# Este código está no meu script principal que interage com o Streamlit
+
+final_state = graph.invoke(...) # Invoca o grafo do LangGraph
+
+# Lógica atual que está a falhar:
+last_message = final_state["messages"][-1]
+response_output = last_message.content
+response_type = "text" # Assume sempre que o resultado é texto
+
+# Envia para a interface
+if response_type == "text":
+    st.markdown(response_output)

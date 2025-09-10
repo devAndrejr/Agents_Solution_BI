@@ -1,15 +1,14 @@
 from __future__ import annotations
 
 import operator
-from typing import (TYPE_CHECKING, Annotated, Any, Dict, List, Optional,
-                    Sequence, TypedDict)
+from typing import TypedDict, Annotated, List, Union, Literal, TYPE_CHECKING, Sequence, Optional, Dict, Any
 
 from langchain_core.messages import BaseMessage
 from plotly.graph_objects import Figure as PlotlyFigure
 
 import core  # Adicionado para garantir que 'core' esteja no escopo global para avaliação de tipos em string
 # Importar RouteDecision diretamente para uso em anotações de tipo
-from core.agents.supervisor import RouteDecision
+RouteDecision = Literal["tool", "code"]
 
 # O bloco TYPE_CHECKING anterior para RouteDecision não é mais estritamente necessário
 # para esta anotação específica, pois RouteDecision é importado diretamente.

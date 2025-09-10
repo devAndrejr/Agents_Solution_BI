@@ -106,10 +106,12 @@ class CodeGenAgent:
             6.  **Carregue os DataFrames necessários** a partir dos arquivos Parquet. A variável `parquet_dir` já está disponível no ambiente de execução. Use-a para construir o caminho. Ex: `df = pd.read_parquet(os.path.join(parquet_dir, "NOME_DO_ARQUIVO.parquet"))`
             7.  **Analise os dados** para responder à pergunta do usuário.
             8.  **Armazene o resultado final** (seja um texto, um número, um DataFrame ou uma figura Plotly) em uma variável chamada `result`.
-            9.  Se a pergunta exigir um gráfico, use a biblioteca Plotly Express.
-            10. **O seu código deve ser um script Python completo e executável.** Não inclua explicações ou texto adicional fora do código.
-            11. **Verifique a Disponibilidade dos Dados:** Se o contexto não fornecer colunas para responder à pergunta, armazene na variável `result` uma mensagem informativa como: 'Não consigo responder a essa pergunta com os dados disponíveis.'
-            12. **NÃO chame .show() ou print()** no seu código. Apenas armazene o objeto final (DataFrame, figura Plotly, ou texto) na variável `result`.
+            9.  **Ordenação para Gráficos:** Para gráficos de linha ou de barras onde a ordem do eixo X é importante (como tempo ou categorias sequenciais), **SEMPRE ORDENE** o DataFrame pela coluna do eixo X antes de criar o gráfico. Ex: `df_grafico = df_grafico.sort_values(by='coluna_do_eixo_x')`.
+            10. Se a pergunta exigir um gráfico, use a biblioteca Plotly Express.
+            11. **O seu código deve ser um script Python completo e executável.** Não inclua explicações ou texto adicional fora do código.
+            12. **Verifique a Disponibilidade dos Dados:** Se o contexto não fornecer colunas para responder à pergunta, armazene na variável `result` uma mensagem informativa como: 'Não consigo responder a essa pergunta com os dados disponíveis.'
+            13. **NÃO chame .show() ou print()** no seu código. Apenas armazene o objeto final (DataFrame, figura Plotly, ou texto) na variável `result`.
+            14. **Tratamento de Dados Vazios:** Se, após a filtragem ou processamento, o DataFrame resultante estiver vazio ou não contiver dados suficientes para a análise/gráfico solicitado, armazene na variável `result` uma mensagem clara e amigável informando o usuário que não há dados disponíveis para a consulta específica (ex: 'Não foram encontrados dados de vendas para o produto X no período Y.').
 
             **Pergunta do Usuário:** "{query}"
 
@@ -148,7 +150,7 @@ class CodeGenAgent:
             result = vendas_por_categoria
             ```
 
-            **Pergunta do Usuário:** "Qual a tendência de preço do produto X em um gráfico de linha?"
+            **Pergunta do Usuário:** "Mostre as vendas mensais do produto X em um gráfico de linha."
 
             **Script Python Ideal:**
             ```python
@@ -156,41 +158,46 @@ class CodeGenAgent:
             import plotly.express as px
             import os
 
-            # Carregar dados do produto (assumindo que 'admatao.parquet' contém dados de preço histórico)
+            # Carregar dados do produto
             df_produto = pd.read_parquet(os.path.join(parquet_dir, "admatao.parquet"))
 
             # Filtrar pelo produto específico (substitua 'X' pelo ID do produto real)
-            # Assumindo que a coluna de ID do produto é 'PRODUTO'
             produto_id = "369947" # Exemplo, o LLM deve extrair isso da pergunta
-            df_produto_filtrado = df_produto[df_produto['PRODUTO'] == produto_id].copy()
+            df_produto_filtrado = df_produto[df_produto['PRODUTO'] == produto_id]
 
-            # Coletar colunas de preço ao longo do tempo (ex: MES_01, MES_02, etc. ou PRECO_MES_01)
-            # Esta parte é um exemplo e pode precisar ser adaptada à estrutura real dos dados
-            # Assumindo que as colunas de preço mensal são 'PRECO_MES_01', 'PRECO_MES_02', ..., 'PRECO_MES_12'
-            # Ou que o LLM pode inferir as colunas corretas
-            precos_mensais = []
-            meses = []
-            # Loop para coletar os preços de cada mês
-            for i in range(1, 13): # Exemplo para 12 meses
-                coluna_preco = 'PRECO_MES_{{02d}}'.format(i) # Ajuste o nome da coluna conforme necessário
-                if coluna_preco in df_produto_filtrado.columns:
-                    # Certifique-se de que os dados são numéricos
-                    preco = pd.to_numeric(df_produto_filtrado[coluna_preco].iloc[0], errors='coerce')
-                    if not pd.isna(preco):
-                        precos_mensais.append(preco)
-                        meses.append(f'Mês {{i:02d}}')
-            
-            # Criar um DataFrame para o gráfico de linha
-            df_tendencia = pd.DataFrame({{
-                'Mês': meses,
-                'Preço': precos_mensais
-            }})
+            # Colunas de vendas mensais (ex: 'MES_01', 'MES_02', etc.)
+            colunas_meses = [f'MES_{{i:02d}}' for i in range(1, 13)]
+            colunas_vendas_presentes = [col for col in colunas_meses if col in df_produto_filtrado.columns]
 
-            # Criar o gráfico de linha
-            fig = px.line(df_tendencia, x='Mês', y='Preço', title=f'Tendência de Preço do Produto {{produto_id}}')
+            # Se não houver colunas de vendas, retorne uma mensagem
+            if not colunas_vendas_presentes:
+                result = f"Não foram encontradas colunas de vendas mensais para o produto {{produto_id}}."
+            else:
+                # Transformar dados de formato largo para longo (unpivot)
+                df_long = df_produto_filtrado.melt(
+                    id_vars=['PRODUTO'],
+                    value_vars=colunas_vendas_presentes,
+                    var_name='Mês',
+                    value_name='Vendas'
+                )
 
-            # Armazenar o resultado
-            result = fig
+                # Converter a coluna de vendas para numérico, tratando erros
+                df_long['Vendas'] = pd.to_numeric(df_long['Vendas'], errors='coerce').fillna(0)
+
+                # Ordenar os dados pelo mês para garantir a ordem cronológica
+                df_long = df_long.sort_values(by='Mês')
+
+                # Criar o gráfico de linha
+                fig = px.line(
+                    df_long,
+                    x='Mês',
+                    y='Vendas',
+                    title=f'Vendas Mensais do Produto {{produto_id}}',
+                    labels={{'Mês': 'Mês', 'Vendas': 'Vendas'}}
+                )
+                
+                # Armazenar o resultado
+                result = fig
             ```
 
             **Pergunta do Usuário:** "Mostre um gráfico de dispersão das vendas vs. lucro."
@@ -347,7 +354,9 @@ Código gerado pelo LLM (ou recuperado do cache):
                 return {"type": "dataframe", "output": result}
             elif 'plotly' in str(type(result)):
                 self.logger.info(f"Resultado do código gerado (Chart): {type(result)}")
-                return {"type": "chart", "output": result}
+                # Serializar o objeto Plotly Figure para JSON
+                chart_json = pio.to_json(result)
+                return {"type": "chart", "output": chart_json}
             else:
                 self.logger.info(f"Resultado do código gerado (Texto): {result}")
                 return {"type": "text", "output": str(result)}

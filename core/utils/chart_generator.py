@@ -52,6 +52,10 @@ class ChartGenerator:
                     "message": "Não há dados disponíveis para gerar o gráfico.",
                 }
 
+            # Ordena os dados pela coluna de data para garantir a ordem cronológica
+            if 'data' in data.columns:
+                data = data.sort_values(by="data")
+
             # Cria o gráfico de linha
             fig = px.line(data, x="data", y="vendas", title=title)
             fig.update_layout(
@@ -166,6 +170,10 @@ class ChartGenerator:
         try:
             if data is None or data.empty:
                 return {"success": False, "message": "Dados insuficientes para gerar o gráfico."}
+
+            # Para gráficos de linha, ordena os dados pelo eixo X para garantir a plotagem correta
+            if chart_type == 'line' and x_col in data.columns:
+                data = data.sort_values(by=x_col)
 
             fig = None
             if chart_type == 'bar':

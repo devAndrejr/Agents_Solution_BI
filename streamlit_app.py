@@ -5,6 +5,7 @@ from datetime import datetime
 import logging
 import streamlit.components.v1 as components
 import sys
+import plotly.io as pio
 
 from core import auth
 from core.query_processor import QueryProcessor
@@ -70,16 +71,28 @@ def show_bi_assistant():
     
 
     # Exibir histórico de mensagens
-    for message in st.session_state[SESSION_STATE_KEYS["MESSAGES"]]:
+    for idx, message in enumerate(st.session_state[SESSION_STATE_KEYS["MESSAGES"]]):
         with st.chat_message(message["role"]):
             output = message.get("output")
             if isinstance(output, pd.DataFrame):
                 st.dataframe(output, use_container_width=True)
             elif isinstance(output, dict) and output.get("type") == "chart": # Para gráficos Plotly
-                st.plotly_chart(output.get("output"), use_container_width=True)
+                st.plotly_chart(output.get("output"), use_container_width=True, key=f"history_chart_{idx}")
             else: # Para texto, gráficos Plotly diretos ou outros tipos de dicionário inesperados
                 if isinstance(output, go.Figure): # Se for um objeto Plotly Figure
-                    st.plotly_chart(output, use_container_width=True)
+                    st.plotly_chart(output, use_container_width=True, key=f"history_fig_{idx}")
+                elif isinstance(output, str):
+                    # Fallback: tentar decodificar JSON de Plotly se for uma string
+                    fig = None
+                    try:
+                        if output.strip().startswith("{"):
+                            fig = pio.from_json(output)
+                    except Exception:
+                        fig = None
+                    if fig is not None:
+                        st.plotly_chart(fig, use_container_width=True, key=f"history_json_fig_{idx}")
+                    else:
+                        st.markdown(str(output or ""))
                 else: # Para texto ou outros tipos de dicionário inesperados
                     st.markdown(str(output or ""))
 
@@ -115,34 +128,55 @@ def show_bi_assistant():
                     SESSION_STATE_KEYS["QUERY_PROCESSOR"]
                 ]
                 response = query_processor.process_query(prompt)
-                # st.write(response) # Removido para evitar exposição de dados
 
-                # Adicionar resposta do assistente ao histórico e exibir
-                st.session_state[SESSION_STATE_KEYS["MESSAGES"]].append(
-                    {"role": ROLES["ASSISTANT"], "output": response["output"]}
-                )
-                if response["type"] == "dataframe":
-                    st.dataframe(response["output"], use_container_width=True)
-                elif response["type"] == "chart":
-                    st.plotly_chart(response["output"], use_container_width=True)
-                    
-                    # Adicionar ao dashboard_charts
-                    if "dashboard_charts" not in st.session_state:
-                        st.session_state.dashboard_charts = []
-                    
-                    st.session_state.dashboard_charts.append({
-                        "type": "chart", # Tipo agora é 'chart'
-                        "output": response["output"], # Objeto Plotly direto
-                        "title": f"Gráfico gerado em {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}", # Título genérico
-                        "query": prompt, # A consulta original
-                        "timestamp": datetime.now().timestamp()
-                    })
-                    st.success("Gráfico adicionado ao Dashboard!")
+                # Normaliza a resposta para exibição e histórico
+                assistant_message = None
+                if response.get("type") == "dataframe":
+                    df = response.get("output")
+                    st.dataframe(df, use_container_width=True)
+                    assistant_message = {"role": ROLES["ASSISTANT"], "output": df}
+                elif response.get("type") == "chart":
+                    raw = response.get("output")
+                    fig = None
+                    try:
+                        if isinstance(raw, str):
+                            # Reconstrói a figura a partir de JSON serializado
+                            fig = pio.from_json(raw)
+                        elif isinstance(raw, dict) and raw.get("data") is not None:
+                            # Constrói figura a partir de dicionário
+                            fig = go.Figure(raw)
+                        elif isinstance(raw, go.Figure):
+                            fig = raw
+                    except Exception as e:
+                        st.error(f"Falha ao decodificar gráfico: {e}")
+
+                    if fig is not None:
+                        st.plotly_chart(fig, use_container_width=True, key=f"new_chart_{datetime.now().timestamp()}")
+
+                        # Adicionar ao dashboard_charts
+                        if "dashboard_charts" not in st.session_state:
+                            st.session_state.dashboard_charts = []
+
+                        st.session_state.dashboard_charts.append({
+                            "type": "chart", # Tipo é 'chart'
+                            "output": fig, # Objeto Plotly direto
+                            "title": f"Gráfico gerado em {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}", # Título genérico
+                            "query": prompt, # A consulta original
+                            "timestamp": datetime.now().timestamp()
+                        })
+                        st.success("Gráfico adicionado ao Dashboard!")
+
+                        assistant_message = {"role": ROLES["ASSISTANT"], "output": {"type": "chart", "output": fig}}
+                    else:
+                        st.warning("Não foi possível renderizar o gráfico retornado.")
+                        assistant_message = {"role": ROLES["ASSISTANT"], "output": str(response)}
                 else:
-                    if response["type"] == "text":
-                        st.markdown(response["output"])
-                    else: # Para qualquer outro tipo inesperado, exibe o dicionário completo para depuração
-                        st.markdown(str(response))
+                    text = response.get("output")
+                    st.markdown(text if text is not None else "")
+                    assistant_message = {"role": ROLES["ASSISTANT"], "output": text if text is not None else ""}
+
+                # Adiciona a mensagem do assistente ao histórico já normalizada
+                st.session_state[SESSION_STATE_KEYS["MESSAGES"]].append(assistant_message)
 
     st.markdown(
         f"<div class='footer'>Desenvolvido para Análise de Dados Caçula © {datetime.now().year}</div>",

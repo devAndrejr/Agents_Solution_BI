@@ -47,6 +47,10 @@ def prepare_chart_data(df, x_col, y_col, chart_type="bar", title=None):
             )
         }
     try:
+        # Ordena o DataFrame pela coluna do eixo X se for um gráfico de linha
+        if chart_type == 'line':
+            df = df.sort_values(by=x_col)
+
         data = [
             {
                 "x": df[x_col].tolist(),

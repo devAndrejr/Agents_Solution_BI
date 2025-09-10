@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Evolução da Arquitetura - Agent BI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .card {
+            transition: all 0.3s ease-in-out;
+            min-height: 400px;
+        }
+        .card-content {
+            transition: opacity 0.5s ease-in-out;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 text-gray-800">
+
+    <div class="container mx-auto p-4 md:p-8">
+        <header class="text-center mb-12">
+            <h1 class="text-4xl md:text-5xl font-bold text-gray-800">Simplificando a Arquitetura do Agent BI</h1>
+            <p class="text-lg md:text-xl text-gray-600 mt-4 max-w-3xl mx-auto">Uma analogia para entendermos por que esta evolução é crucial para o sucesso do nosso produto.</p>
+        </header>
+
+        <main class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <!-- Coluna da Arquitetura Atual -->
+            <div id="card-atual" class="card bg-white border-4 border-red-300 rounded-2xl p-6 shadow-lg flex flex-col">
+                <h2 class="text-3xl font-bold text-red-600 mb-4 text-center">ANTES: "A Cozinha Caótica"</h2>
+                <div id="content-atual" class="card-content flex-grow flex flex-col items-center justify-center text-center">
+                    <!-- Conteúdo será injetado aqui -->
+                </div>
+                <button id="btn-atual" class="mt-6 w-full bg-red-500 hover:bg-red-600 text-white font-bold py-3 px-4 rounded-lg transition-transform transform hover:scale-105">Mostrar Problema</button>
+            </div>
+
+            <!-- Coluna da Nova Arquitetura -->
+            <div id="card-nova" class="card bg-white border-4 border-green-300 rounded-2xl p-6 shadow-lg flex flex-col">
+                <h2 class="text-3xl font-bold text-green-600 mb-4 text-center">DEPOIS: "A Cozinha Profissional"</h2>
+                <div id="content-nova" class="card-content flex-grow flex flex-col items-center justify-center text-center">
+                     <!-- Conteúdo será injetado aqui -->
+                </div>
+                <button id="btn-nova" class="mt-6 w-full bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-4 rounded-lg transition-transform transform hover:scale-105" disabled>Mostrar Solução</button>
+            </div>
+        </main>
+        
+        <section id="summary" class="mt-12 bg-white rounded-2xl p-8 shadow-xl transition-opacity duration-1000 opacity-0">
+            <h2 class="text-3xl font-bold text-center mb-6 text-gray-800">Resumo da Transformação</h2>
+            <div class="overflow-x-auto">
+                <table class="w-full min-w-full text-left border-collapse">
+                    <thead>
+                        <tr class="bg-gray-100">
+                            <th class="p-4 text-lg font-bold border-b-2 border-gray-200">De (Arquitetura Atual)</th>
+                            <th class="p-4 text-lg font-bold border-b-2 border-gray-200">Para (Nova Arquitetura)</th>
+                            <th class="p-4 text-lg font-bold border-b-2 border-gray-200 text-blue-600">Benefício de Negócio</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="hover:bg-gray-50">
+                            <td class="p-4 border-b border-gray-200 text-red-600"><strong>Caos e Complexidade</strong></td>
+                            <td class="p-4 border-b border-gray-200 text-green-600"><strong>Ordem e Clareza</strong></td>
+                            <td class="p-4 border-b border-gray-200 font-medium">Menor custo de manutenção</td>
+                        </tr>
+                        <tr class="hover:bg-gray-50">
+                            <td class="p-4 border-b border-gray-200 text-red-600"><strong>Inconsistência e Lentidão</strong></td>
+                            <td class="p-4 border-b border-gray-200 text-green-600"><strong>Confiança e Velocidade</strong></td>
+                            <td class="p-4 border-b border-gray-200 font-medium">Decisões mais rápidas e seguras</td>
+                        </tr>
+                        <tr class="hover:bg-gray-50">
+                            <td class="p-4 border-b border-gray-200 text-red-600"><strong>Frágil e Difícil de Mudar</strong></td>
+                            <td class="p-4 border-b border-gray-200 text-green-600"><strong>Robusta e Escalável</strong></td>
+                            <td class="p-4 border-b border-gray-200 font-medium">Agilidade para inovar e crescer</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+    </div>
+
+    <script>
+        const dataAtual = [
+            {
+                icon: `<svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a2 2 0 01-2-2V4a2 2 0 012-2h4.586a1 1 0 01.707.293l2.414 2.414a1 1 0 01.293.707V8z" /></svg>`,
+                title: "Vários Garçons Gritando Pedidos",
+                description: "Múltiplos sistemas (`Streamlit`, `FastAPI`, `Flask`) tentam dar ordens ao mesmo tempo, causando confusão."
+            },
+            {
+                icon: `<svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>`,
+                title: "O Chef Faz de Tudo",
+                description: "O `SupervisorAgent` tenta ser o Chef, mas também corre para pegar os ingredientes e às vezes até lava os pratos. Ele fica sobrecarregado."
+            },
+            {
+                icon: `<svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M15 21a6 6 0 00-9-5.197m0 0A10.999 10.999 0 0012 12c2.67 0 5.14.93 7 2.472" /></svg>`,
+                title: "Cozinheiros Confusos",
+                description: "Os `Agentes Especialistas` recebem ordens de diferentes pessoas e às vezes fazem o mesmo trabalho duas vezes."
+            },
+            {
+                icon: `<svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 11h10" /></svg>`,
+                title: "Ingredientes Espalhados",
+                description: "Os dados e as regras de negócio (`Catálogos Múltiplos`) estão em várias geladeiras diferentes, e ninguém sabe ao certo qual é o mais fresco."
+            },
+            {
+                icon: `<svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" /></svg>`,
+                title: "O Problema para o Negócio",
+                description: "<strong>Resultado:</strong> Lentidão, Inconsistência e Alto Custo de Manutenção."
+            }
+        ];
+
+        const dataNova = [
+            {
+                icon: `<svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>`,
+                title: "Um Único Garçom (Maître)",
+                description: "A interface do `Streamlit` é o único que fala com o cliente. Ele anota o pedido e o entrega exclusivamente ao Chef Executivo."
+            },
+            {
+                icon: `<svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M12 6a2 2 0 100-4 2 2 0 000 4zm0 14a2 2 0 100-4 2 2 0 000 4zm6-7a2 2 0 100-4 2 2 0 000 4zm-12 0a2 2 0 100-4 2 2 0 000 4z" /></svg>`,
+                title: "O Chef Executivo (Orquestrador)",
+                description: "O `LangGraph` é o nosso cérebro. Ele recebe o pedido, o divide em passos claros e distribui as tarefas."
+            },
+            {
+                icon: `<svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" /></svg>`,
+                title: "Cozinheiros Especialistas (Sous-Chefs)",
+                description: "Cada `Agente Especialista` tem uma única função. Um só faz molhos, outro só grelha. Eles fazem seu trabalho de forma rápida e perfeita."
+            },
+            {
+                icon: `<svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4" /></svg>`,
+                title: "Um Estoque Central Organizado",
+                description: "A `Camada de Conectividade` e o `Catálogo Unificado` são nosso estoque. Todos os ingredientes são frescos, etiquetados e estão em um só lugar."
+            },
+             {
+                icon: `<svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>`,
+                title: "O Benefício para o Negócio",
+                description: "<strong>Resultado:</strong> Velocidade, Confiança, Escalabilidade e Menor Custo."
+            }
+        ];
+
+        let currentIndexAtual = -1;
+        let currentIndexNova = -1;
+
+        const contentAtualEl = document.getElementById('content-atual');
+        const contentNovaEl = document.getElementById('content-nova');
+        const btnAtual = document.getElementById('btn-atual');
+        const btnNova = document.getElementById('btn-nova');
+        const summaryEl = document.getElementById('summary');
+
+        function updateContent(element, data, index) {
+            if (index < 0 || index >= data.length) return;
+            const item = data[index];
+            element.style.opacity = 0;
+            setTimeout(() => {
+                element.innerHTML = `
+                    <div class="mb-4">${item.icon}</div>
+                    <h3 class="text-2xl font-bold mb-2">${item.title}</h3>
+                    <p class="text-gray-600">${item.description}</p>
+                `;
+                element.style.opacity = 1;
+            }, 300);
+        }
+
+        btnAtual.addEventListener('click', () => {
+            currentIndexAtual++;
+            updateContent(contentAtualEl, dataAtual, currentIndexAtual);
+            if (currentIndexAtual >= 0) {
+                btnNova.disabled = false;
+            }
+            if (currentIndexAtual === dataAtual.length - 1) {
+                btnAtual.textContent = "Problemas Exibidos";
+                btnAtual.disabled = true;
+            }
+        });
+        
+        btnNova.addEventListener('click', () => {
+            currentIndexNova++;
+            updateContent(contentNovaEl, dataNova, currentIndexNova);
+             if (currentIndexNova === dataNova.length - 1) {
+                btnNova.textContent = "Soluções Exibidas";
+                btnNova.disabled = true;
+                summaryEl.style.opacity = 1;
+            }
+        });
+        
+        // Init state
+        contentAtualEl.innerHTML = `<p class="text-gray-500 text-lg p-10">Clique no botão abaixo para começar a explorar os desafios da nossa arquitetura atual.</p>`;
+        contentNovaEl.innerHTML = `<p class="text-gray-500 text-lg p-10">Aguardando a apresentação dos problemas para mostrar as soluções...</p>`;
+
+
+    </script>
+</body>
+</html>

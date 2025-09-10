@@ -1,0 +1,52 @@
+[
+  {
+    "id": "TC001",
+    "title": "test_secure_user_authentication_and_role_based_access",
+    "description": "Verify that the user authentication system securely logs in users and enforces role-based access control to restrict access to features based on user roles."
+  },
+  {
+    "id": "TC002",
+    "title": "test_natural_language_query_processing_accuracy",
+    "description": "Test the conversational interface's ability to accurately interpret and respond to complex Portuguese natural language queries with a minimum accuracy of 95%."
+  },
+  {
+    "id": "TC003",
+    "title": "test_agent_response_including_text_numbers_and_visualizations",
+    "description": "Validate that the agent returns responses containing text, numerical data, and dynamic visualizations such as charts and tables as requested by the user."
+  },
+  {
+    "id": "TC004",
+    "title": "test_dashboard_load_time_and_interactivity",
+    "description": "Ensure that the main dashboard loads key business KPIs within 5 seconds and supports interactive filtering, sorting, and exploration of data visualizations."
+  },
+  {
+    "id": "TC005",
+    "title": "test_administrator_monitoring_and_metadata_management",
+    "description": "Verify that administrators can monitor data pipeline health, track data integration status, and manage business metadata through the provided interfaces."
+  },
+  {
+    "id": "TC006",
+    "title": "test_user_conversation_history_accessibility",
+    "description": "Check that users can access and review their past conversation history within the chat interface."
+  },
+  {
+    "id": "TC007",
+    "title": "test_secure_data_encryption_in_transit_and_at_rest",
+    "description": "Validate that all sensitive business data is encrypted both during transmission and when stored, complying with security requirements."
+  },
+  {
+    "id": "TC008",
+    "title": "test_system_logging_and_error_monitoring",
+    "description": "Ensure that the system captures all critical events and errors through structured logging for audit and troubleshooting purposes."
+  },
+  {
+    "id": "TC009",
+    "title": "test_system_performance_under_increased_load",
+    "description": "Test that the system maintains performance and reliability when handling a 50% increase in user load and 100% increase in data volume without degradation."
+  },
+  {
+    "id": "TC010",
+    "title": "test_integration_with_sql_server_and_openai_models",
+    "description": "Verify the integration with SQL Server for data querying and OpenAI language models for natural language processing to ensure seamless data retrieval and response generation."
+  }
+]

@@ -8,6 +8,7 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from ui.ui_components import get_image_download_link
 
+st.set_page_config(page_title="Gráficos Salvos", page_icon="📌")
 st.markdown("<h1 class='main-header'>Dashboard</h1>", unsafe_allow_html=True)
 st.markdown("<div class='info-box'>Visualize e organize seus gráficos em um dashboard personalizado.</div>", unsafe_allow_html=True)
 

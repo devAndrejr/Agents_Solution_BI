@@ -1,8 +1,9 @@
 from sqlalchemy import create_engine
+import os
 from core.config.config import Config
 
-# Get the SQLAlchemy database URI from the Config class
-DATABASE_URI = Config().SQLALCHEMY_DATABASE_URI
+# Preferir a variável de ambiente completa se estiver definida
+DATABASE_URI = os.getenv("SQLALCHEMY_DATABASE_URI") or Config().SQLALCHEMY_DATABASE_URI
 
 # Create the SQLAlchemy engine with connection pooling
 # pool_size: the number of connections to keep open in the pool
