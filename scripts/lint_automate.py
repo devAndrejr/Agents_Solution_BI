@@ -18,10 +18,9 @@ AUTOFLAKE_CMD = [
     "--remove-unused-variables",
     "--in-place",
     "--expand-star-imports",
-    "--recursive",
 ]
-BLACK_CMD = ["black"]
-ISORT_CMD = ["isort", "--profile", "black"]
+BLACK_CMD = ["python", "-m", "black"]
+ISORT_CMD = ["python", "-m", "isort", "--profile", "black"]
 
 
 def listar_pyfiles(root_dir):
@@ -47,58 +46,71 @@ def backup_arquivo(src, root_dir):
 def rodar_cmd(cmd, files):
     """Executa um comando de subprocesso com a lista de arquivos."""
     try:
-        subprocess.run(cmd + files, check=True, capture_output=True)
+        subprocess.run(cmd + files, check=True, capture_output=True, text=True)
         return True, None
     except subprocess.CalledProcessError as e:
-        return False, e.stderr.decode()
+        return False, e.stderr
 
 
 def main():
-    root_dir = os.path.abspath(os.path.dirname(__file__)).replace("scripts", "")
+    root_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), os.pardir))
     pyfiles = listar_pyfiles(root_dir)
     alterados = []
     os.makedirs(BACKUP_DIR, exist_ok=True)
     relatorio = []
     relatorio.append(f"Relatório de automação de lint - {datetime.now()}\n")
     relatorio.append(f"Arquivos processados: {len(pyfiles)}\n")
+    
     for f in pyfiles:
         backup = backup_arquivo(f, root_dir)
         relatorio.append(f"Backup: {f} -> {backup}")
+
     # Checar se autoflake está instalado
     autoflake_spec = importlib.util.find_spec("autoflake")
     if autoflake_spec is not None:
-        ok, err = rodar_cmd(AUTOFLAKE_CMD, pyfiles)
-        relatorio.append(f"autoflake: {'OK' if ok else 'ERRO'}")
-        if err:
-            relatorio.append(f"autoflake erro: {err}")
+        for f in pyfiles:
+            ok, err = rodar_cmd(AUTOFLAKE_CMD, [f])
+            if not ok:
+                relatorio.append(f"autoflake erro em {f}: {err}")
+        relatorio.append("autoflake: CONCLUÍDO")
     else:
         relatorio.append(
             "autoflake: NÃO INSTALADO - Instale com 'pip install autoflake' para remover imports/variáveis não usados."
         )
+
     # Rodar black
-    ok, err = rodar_cmd(BLACK_CMD, pyfiles)
-    relatorio.append(f"black: {'OK' if ok else 'ERRO'}")
-    if err:
-        relatorio.append(f"black erro: {err}")
+    for f in pyfiles:
+        ok, err = rodar_cmd(BLACK_CMD, [f])
+        if not ok:
+            relatorio.append(f"black erro em {f}: {err}")
+    relatorio.append("black: CONCLUÍDO")
+
     # Rodar isort
-    ok, err = rodar_cmd(ISORT_CMD, pyfiles)
-    relatorio.append(f"isort: {'OK' if ok else 'ERRO'}")
-    if err:
-        relatorio.append(f"isort erro: {err}")
+    for f in pyfiles:
+        ok, err = rodar_cmd(ISORT_CMD, [f])
+        if not ok:
+            relatorio.append(f"isort erro em {f}: {err}")
+    relatorio.append("isort: CONCLUÍDO")
+
     # Listar arquivos alterados
     for f in pyfiles:
         backup = os.path.join(BACKUP_DIR, os.path.relpath(f, root_dir))
         if os.path.exists(backup):
-            with open(f, "r", encoding="utf-8") as f1, open(
-                backup, "r", encoding="utf-8"
-            ) as f2:
-                conteudo_atual = f1.read()
-                conteudo_backup = f2.read()
-            if conteudo_atual != conteudo_backup:
-                alterados.append(f)
+            try:
+                with open(f, "r", encoding="utf-8", errors="ignore") as f1, open(
+                    backup, "r", encoding="utf-8", errors="ignore"
+                ) as f2:
+                    conteudo_atual = f1.read()
+                    conteudo_backup = f2.read()
+                if conteudo_atual != conteudo_backup:
+                    alterados.append(f)
+            except IOError as e:
+                relatorio.append(f"Erro ao comparar o arquivo {f}: {e}")
+
     relatorio.append(f"\nArquivos alterados ({len(alterados)}):")
     for f in alterados:
         relatorio.append(f"- {f}")
+        
     # Salvar relatório
     with open(RELATORIO, "w", encoding="utf-8") as f:
         f.write("\n".join(relatorio))
