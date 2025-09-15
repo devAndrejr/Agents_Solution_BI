@@ -1,114 +1,89 @@
+import logging
 import logging.config
 import os
-from core.config.config import Config # Import Config
-
-# Check if python-json-logger is installed
-try:
-    import pythonjsonlogger.jsonlogger
-    JSON_LOGGER_AVAILABLE = True
-except ImportError:
-    JSON_LOGGER_AVAILABLE = False
-
-# Check if sentry-sdk is installed
-try:
-    import sentry_sdk
-    SENTRY_AVAILABLE = True
-except ImportError:
-    SENTRY_AVAILABLE = False
+from datetime import datetime
 
 def setup_logging():
     """
-    Configures the logging for the application using a dictionary configuration.
+    Configures file-based and stream-based logging for the application.
     """
-    LOGS_DIR = "logs"
-    if not os.path.exists(LOGS_DIR):
-        os.makedirs(LOGS_DIR)
-        print(f"Diretório de logs criado em: {os.path.abspath(LOGS_DIR)}") # Debug print
+    logs_dir = "logs"
+    if not os.path.exists(logs_dir):
+        os.makedirs(logs_dir)
 
-    # Base formatter
-    formatter = "json" if JSON_LOGGER_AVAILABLE else "simple"
+    # Define subdirectories for different logs
+    activity_log_dir = os.path.join(logs_dir, "app_activity")
+    error_log_dir = os.path.join(logs_dir, "errors")
+    interaction_log_dir = os.path.join(logs_dir, "user_interactions")
+    os.makedirs(activity_log_dir, exist_ok=True)
+    os.makedirs(error_log_dir, exist_ok=True)
+    os.makedirs(interaction_log_dir, exist_ok=True)
 
-    # Get the desired log level from Config
-    app_log_level = "DEBUG" # <--- TEMPORARY CHANGE FOR DEBUGGING
+    # Generate date-stamped filenames
+    current_date = datetime.now().strftime("%Y-%m-%d")
+    activity_log_file = os.path.join(activity_log_dir, f"activity_{current_date}.log")
+    error_log_file = os.path.join(error_log_dir, f"error_{current_date}.log")
+    interaction_log_file = os.path.join(interaction_log_dir, f"interactions_{current_date}.log")
 
-    logging_config = {
+    LOGGING_CONFIG = {
         "version": 1,
         "disable_existing_loggers": False,
-        "filters": {
-            "correlation_id": {
-                "()": "core.utils.correlation_id.CorrelationIdFilter",
-            },
-        },
         "formatters": {
-            "json": {
-                "()": "pythonjsonlogger.jsonlogger.JsonFormatter",
-                "format": "%(asctime)s %(name)s %(levelname)s %(message)s %(lineno)d %(pathname)s %(correlation_id)s",
+            "default": {
+                "format": "%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+                "datefmt": "%Y-%m-%d %H:%M:%S",
             },
-            "simple": {
-                "format": "%(asctime)s - %(name)s - %(levelname)s - %(correlation_id)s - %(message)s",
-            },
+            "interaction": {
+                "format": "%(asctime)s - %(message)s",
+                "datefmt": "%Y-%m-%d %H:%M:%S",
+            }
         },
         "handlers": {
             "console": {
                 "class": "logging.StreamHandler",
-                "level": app_log_level, # Use the configured log level
-                "formatter": "simple",
-                "stream": "ext://sys.stdout",
-                "filters": ["correlation_id"],
-            },
-            "file": {
-                "class": "logging.handlers.RotatingFileHandler",
-                "level": "INFO", # File handler can remain INFO or higher
-                "formatter": formatter,
-                "filename": os.path.join(LOGS_DIR, "app.log"),
-                "maxBytes": 10485760,  # 10MB
-                "backupCount": 5,
-                "encoding": "utf8",
-                "filters": ["correlation_id"],
-            },
-            "audit_file": {
-                "class": "logging.handlers.RotatingFileHandler",
+                "formatter": "default",
                 "level": "INFO",
-                "formatter": formatter,
-                "filename": os.path.join(LOGS_DIR, "audit.log"),
+            },
+            "activity_file": {
+                "class": "logging.handlers.RotatingFileHandler",
+                "formatter": "default",
+                "filename": activity_log_file,
                 "maxBytes": 10485760,  # 10MB
                 "backupCount": 5,
-                "encoding": "utf8",
-                "filters": ["correlation_id"],
+                "level": "INFO",
+                "encoding": "utf-8",
+            },
+            "error_file": {
+                "class": "logging.handlers.RotatingFileHandler",
+                "formatter": "default",
+                "filename": error_log_file,
+                "maxBytes": 10485760,  # 10MB
+                "backupCount": 5,
+                "level": "ERROR",
+                "encoding": "utf-8",
+            },
+            "interaction_file": {
+                "class": "logging.handlers.RotatingFileHandler",
+                "formatter": "interaction",
+                "filename": interaction_log_file,
+                "maxBytes": 10485760,  # 10MB
+                "backupCount": 5,
+                "level": "INFO",
+                "encoding": "utf-8",
             },
         },
         "loggers": {
-            "": { # Root logger
-                "level": app_log_level, # Use the configured log level
-                "handlers": ["console", "file"],
-            },
-            "streamlit": {
+            "user_interaction": {
+                "handlers": ["interaction_file"],
                 "level": "INFO",
-                "handlers": ["console", "file"],
                 "propagate": False,
-            },
-            "core": {
-                "level": "DEBUG",
-                "handlers": ["console", "file"],
-                "propagate": False,
-            },
-            "audit": {
-                "level": "INFO",
-                "handlers": ["audit_file"],
-                "propagate": False,
-            },
+            }
+        },
+        "root": {
+            "handlers": ["console", "activity_file", "error_file"],
+            "level": "INFO",
         },
     }
 
-    # If json logger is not available, we need to remove it from the config
-    if not JSON_LOGGER_AVAILABLE:
-        del logging_config["formatters"]["json"]
-
-    if SENTRY_AVAILABLE and os.getenv("SENTRY_DSN"):
-        logging_config["handlers"]["sentry"] = {
-            "class": "sentry_sdk.integrations.logging.EventHandler",
-            "level": "ERROR",
-        }
-        logging_config["loggers"][""]["handlers"].append("sentry")
-
-    logging.config.dictConfig(logging_config)
+    logging.config.dictConfig(LOGGING_CONFIG)
+    logging.info("Logging configured successfully.")

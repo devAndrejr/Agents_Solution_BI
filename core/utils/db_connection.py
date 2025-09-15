@@ -1,13 +1,10 @@
 from sqlalchemy import create_engine
-import os
-from core.config.config import Config
+from core.config.settings import settings # Import the new settings object
 
-# Preferir a variável de ambiente completa se estiver definida
-DATABASE_URI = os.getenv("SQLALCHEMY_DATABASE_URI") or Config().SQLALCHEMY_DATABASE_URI
+# A URI da base de dados é agora obtida diretamente do objeto de configurações centralizado.
+DATABASE_URI = settings.SQL_SERVER_CONNECTION_STRING
 
 # Create the SQLAlchemy engine with connection pooling
-# pool_size: the number of connections to keep open in the pool
-# max_overflow: the number of connections that can be opened beyond the pool_size
 engine = create_engine(DATABASE_URI, pool_size=10, max_overflow=20)
 
 def get_db_connection():

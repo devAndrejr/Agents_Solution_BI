@@ -1,4 +1,27 @@
-PROMPT AVANÇADO: ASSISTENTE DE INTEGRAÇÃO DE ARQUITETURA1. PERSONA E PAPELQUEM VOCÊ É:Você é um Engenheiro de Integração de Software Sênior. A sua especialidade é pegar componentes de software recém-desenvolvidos e integrá-los de forma coesa em bases de código complexas e existentes. Você é mestre em resolver dependências, corrigir ImportError, e criar planos de implementação claros e à prova de falhas.2. CONTEXTO E OBJETIVO GERALA SITUAÇÃO ATUAL:Eu executei com sucesso um prompt de refatoração que gerou os cinco (5) ficheiros chave para a nova arquitetura do meu projeto Agent_BI. Agora, possuo estes cinco ficheiros, mas preciso integrá-los na minha estrutura de projeto existente, que é grande e complexa (conforme o relatorio_completo.md). O meu maior receio é que os imports estejam incorretos, causando uma cascata de erros.MEU OBJETIVO FINAL:Obter uma solução completa que não só me dê o código corrigido, mas também um guia passo a passo para realizar a integração de forma segura e bem-sucedida, garantindo que toda a nova arquitetura funcione em conjunto.3. TAREFA ESPECÍFICA E IMEDIATASUA TAREFA AGORA:Analise os dois conjuntos de informações que fornecerei abaixo:O relatorio_completo.md, que mapeia toda a estrutura de ficheiros do meu projeto.Os cinco (5) ficheiros Python recém-gerados para a nova arquitetura.Com base nesta análise cruzada, gere um Plano de Integração Completo em duas partes:Parte 1: Geração dos Ficheiros Corrigidos e Prontos para IntegraçãoReescreva os cinco ficheiros da nova arquitetura (core/tools/data_tools.py, core/agents/bi_agent_nodes.py, core/graph/graph_builder.py, main.py, streamlit_app.py). A sua principal tarefa aqui é corrigir todas as declarações de import. Analise de onde cada módulo, classe ou função está a ser importado e ajuste o caminho para que corresponda perfeitamente à estrutura de pastas detalhada no relatorio_completo.md. Use importações relativas a partir da raiz do projeto (ex: from core.config.settings import settings) sempre que aplicável.Parte 2: Checklist de Implementação DetalhadoCrie um checklist em formato Markdown que eu possa seguir passo a passo para implementar a nova arquitetura. O checklist deve incluir:Preparação: Quais ficheiros devo fazer backup antes de começar.Remoção: Uma lista explícita dos ficheiros e pastas da arquitetura antiga que devem ser eliminados com segurança (ex: core/api, core/agents/supervisor_agent.py).Implementação: Instruções claras sobre onde colocar os cinco novos ficheiros corrigidos.Configuração: Lembretes para verificar o ficheiro .env e as dependências em requirements.txt.Execução e Verificação: Os comandos exatos para iniciar o backend (FastAPI) e o frontend (Streamlit) em terminais separados.Pontos de Atenção: Avisos sobre possíveis problemas comuns (ex: "Certifique-se de que o DatabaseAdapter está a ser inicializado corretamente com as novas configurações").4. DOCUMENTOS E CÓDIGO-FONTE PARA ANÁLISE[DOCUMENTO 1: ESTRUTURA COMPLETA DO PROJETO]# Relatório Completo de Arquivos do Projeto Agent_BI
+PROMPT MESTRE: IMPLEMENTAÇÃO DA ARQUITETURA AVANÇADA DO AGENT_BI
+1. PERSONA E PAPEL
+QUEM VOCÊ É:
+Você é um Arquiteto de Software Sênior e Engenheiro de IA, especialista em migrar sistemas de agentes complexos para arquiteturas LangGraph robustas, seguindo o padrão de Máquina de Estados Finitos. A sua missão é refatorar um projeto existente para um estado de excelência técnica, focando em modularidade, eficiência (mínimo de chamadas ao LLM), e desacoplamento total entre backend e frontend.
+
+2. CONTEXTO E OBJETIVO GERAL
+A SITUAÇÃO ATUAL:
+Estou a finalizar a refatoração do projeto Agent_BI. O projeto já passou por uma limpeza estrutural, mas a lógica de orquestração inteligente do sistema antigo (supervisor_agent) foi substituída por um agente placeholder (caculinha_bi_agent), resultando na perda de funcionalidade. O objetivo agora é realizar a refatoração final e definitiva, implementando a "Arquitetura Avançada" que foi proposta em relatórios de análise anteriores (fornecidos abaixo).
+
+MEU OBJETIVO FINAL:
+Obter o código-fonte completo e funcional para os componentes chave da nova arquitetura. O sistema final deve:
+Orquestrar todo o fluxo de tarefas através de um StateGraph no LangGraph.
+Utilizar o LLM de forma mínima, apenas para classificação de intenção e geração de código complexo.
+Implementar o fluxo de UX avançado para gráficos: desambiguação com o utilizador e geração de uma especificação JSON para o Plotly.js.
+Ter uma clara separação entre a API de backend (FastAPI) e a interface de utilizador (Streamlit).
+
+3. TAREFA ESPECÍFICA E IMEDIATA
+SUA TAREFA AGORA:
+Com base em todos os relatórios e no código-fonte atual fornecido, gere os seguintes cinco (5) ficheiros Python, que constituirão o núcleo da nova aplicação. Siga rigorosamente as melhores práticas de design de software.
+1. core/tools/data_tools.py (As Ferramentas Simples):
+Crie uma ferramenta (@tool) chamada fetch_data_from_query.
+A sua única responsabilidade é receber uma query SQL como string, executá-la usando o DatabaseAdap...
+[truncated]
+# Relatório Completo de Arquivos do Projeto Agent_BI
 
 Este documento fornece um resumo de cada arquivo no projeto, organizado por diretório.
 
@@ -346,505 +369,1019 @@ Este documento fornece um resumo de cada arquivo no projeto, organizado por dire
 | --- | --- |
 | `__init__.py` | Arquivo vazio que marca o diretório `ui` como um pacote Python. |
 | `ui_components.py` | Contém funções utilitárias para a interface do usuário Streamlit, como gerar links para download de imagens e CSVs, e aplicar customizações a gráficos Plotly. |
-[CÓDIGO-FONTE DA NOVA ARQUITETURA PARA INTEGRAR](INSTRUÇÃO: COLOQUE AQUI OS 5 FICHEIROS GERADOS PELO GEMINI NA SUA ÚLTIMA SOLICITAÇÃO)Ficheiro 1: core/tools/data_tools.py"""
-Módulo contendo ferramentas de dados para serem usadas pelos agentes.
-Cada ferramenta deve ser uma função simples e focada em uma única tarefa.
-"""
+[DOCUMENTO 2: RELATÓRIO DE ANÁLISE ESTRATÉGICA]
+Compreendi o seu desafio e o objetivo estratégico para o **Agent_BI**. A dificuldade na geração de gráficos conversacionais é um ponto de inflexão crítico que pode definir o sucesso ou o fracasso do produto. A seguir, apresento um relatório de análise detalhado, seguindo a estrutura solicitada e atuando na persona de Arquiteto de Soluções e Gerente de Produto Sênior.
+
+---
+
+## **Relatório de Análise Estratégica e Técnica: Agent_BI**
+
+**Para:** Líder Técnico do Projeto
+**De:** Arquiteto de Soluções & Gerente de Produto Sênior
+**Data:** 2025-09-09
+**Assunto:** Análise do PRD v1.0 com foco na implementação de gráficos conversacionais.
+
+### **1. Análise Geral do Produto**
+
+A visão do Agent_BI é forte e alinhada a uma dor de mercado clara e persistente: a latência entre a necessidade de um insight e sua obtenção. A democratização do acesso aos dados através de uma interface conversacional é uma proposta de valor poderosa.
+
+*   **Pontos Fortes:**
+    *   **Problema Bem Definido:** O PRD articula com clareza o problema da dependência de equipes técnicas (Seção 1.2), o que valida a necessidade do produto.
+    *   **Público-Alvo Abrangente:** As personas (Seção 3) cobrem desde o nível estratégico (Carlos, o Diretor) até o operacional (Beatriz, a Compradora), mostrando um grande potencial de impacto organizacional.
+    *   **Metas Mensuráveis:** As metas de negócio e de produto (Seção 2.2, 2.3) são específicas e quantificáveis (ex: "Reduzir em 40% o tempo", "95% de precisão"), o que facilita a medição de sucesso.
+
+*   **Potenciais Fraquezas e Desafios:**
+    *   **Complexidade da "Mágica":** O sucesso do produto depende quase inteiramente da qualidade da Feature 4.1.1 (PLN). Se a tradução de linguagem natural para consultas de dados for imprecisa ou limitada, a confiança do usuário será erodida rapidamente, comprometendo todas as outras funcionalidades.
+    *   **Ambição da Interatividade:** A Feature 4.2.3 (Interatividade) é fundamental para a retenção de usuários (especialmente Analistas), mas sua integração fluida em uma interface de chat é um desafio de UX e arquitetura notoriamente complexo. É aqui que reside seu problema principal.
+
+### **2. Análise de Riscos e Pontos de Atenção**
+
+Identifiquei os 5 principais riscos que podem comprometer o projeto:
+
+1.  **Risco de Experiência do Usuário (UX) - (MUITO ALTO):** A transição entre a conversa (fluida, baseada em texto) e a visualização de dados (estruturada, gráfica) é o ponto de maior atrito. Se o usuário sentir que está "saindo" da conversa para ver um gráfico, a experiência se quebra. Este é o seu desafio atual e o maior risco para a adoção do produto.
+
+2.  **Risco Técnico de Tradução (PLN -> Consulta) - (ALTO):** A capacidade do agente de converter perguntas ambíguas em consultas de dados precisas é o núcleo técnico do produto. Falhas aqui geram respostas incorretas, minando a confiança (meta de 95% de precisão). A complexidade aumenta com a necessidade de cruzar fontes de dados, como solicitado pela persona Ana.
+
+3.  **Risco de Governança de Dados - (MÉDIO):** O agente é tão inteligente quanto o seu **Catálogo de Dados (Feature 4.3.2)**. Se os metadados não forem ricos, atualizados e bem gerenciados, o agente não terá o contexto de negócio necessário para desambiguar termos ("faturamento" significa bruto ou líquido?) ou entender relacionamentos.
+
+4.  **Risco de Performance e Escalabilidade - (MÉDIO):** Os Requisitos Não-Funcionais (NFRs) são exigentes (consultas < 3s, dashboards < 10s, suportar +100% de dados). Uma arquitetura que não planeje para cache, otimização de consultas e escalonamento horizontal irá falhar em atender a esses NFRs à medida que a base de usuários e o volume de dados crescerem.
+
+5.  **Risco de Gestão de Expectativas - (BAIXO/MÉDIO):** O termo "agente conversacional" pode levar os usuários a esperarem uma inteligência quase humana. O sistema precisa ser excelente em comunicar suas limitações e guiar o usuário para perguntas que ele consegue responder, evitando a frustração do "Desculpe, não entendi".
+
+### **3. [SEÇÃO CRÍTICA] Estratégia de Implementação para Gráficos Conversacionais**
+
+Esta seção detalha uma solução robusta para o seu principal desafio.
+
+#### **3.1. Fluxo de Experiência do Usuário (UX Flow)**
+
+O fluxo deve ser iterativo e colaborativo, fazendo o usuário sentir que está construindo a visualização *com* o agente.
+
+1.  **Iniciação (Pergunta Ampla):**
+    *   **Usuário:** "me mostre as vendas do último trimestre."
+
+2.  **Desambiguação Guiada (O Agente Pede Esclarecimentos):**
+    *   **Agente:** "Claro. Posso gerar um gráfico de vendas para o último trimestre. Para que a visualização seja mais útil, por favor, me ajude com alguns detalhes:"
+        *   *Como você gostaria de ver as vendas?* (Oferece botões de sugestão) `[Por Região]`, `[Por Categoria de Produto]`, `[Evolução Mensal]`
+        *   *Qual tipo de gráfico você prefere?* (Oferece botões de sugestão) `[Barras]`, `[Linhas]`, `[Pizza]`
+
+3.  **Confirmação e Geração:**
+    *   O usuário clica em `[Por Região]` e `[Barras]`.
+    *   **Agente:** "Entendido. Gerando um gráfico de barras com as vendas por região do último trimestre."
+    *   (O agente exibe uma prévia ou o gráfico diretamente na interface).
+
+4.  **Apresentação e Interação Contínua:**
+    *   O gráfico de barras interativo é renderizado **diretamente na área da conversa**.
+    *   Abaixo do gráfico, o agente oferece **ações contextuais** como botões: `[Ver dados em tabela]`, `[Filtrar por estado]`, `[Adicionar ao meu dashboard]`, `[Exportar como PNG]`.
+
+#### **3.2. Arquitetura Técnica para Geração de Gráficos**
+
+A melhor abordagem é desacoplar a lógica de conversação da lógica de renderização de gráficos. O agente não deve criar uma imagem. Ele deve criar uma **especificação de gráfico**.
+
+*   **Proposta:** **Backend (Agente) gera JSON para o Frontend (UI)**.
+    1.  **Backend:** Após a desambiguação, o agente (LLM/PLN) traduz a solicitação do usuário em uma especificação de gráfico estruturada, como um **JSON compatível com Vega-Lite, Plotly ou Chart.js**. Este JSON contém:
+        *   `chart_type`: "bar"
+        *   `data_query`: A consulta SQL ou DSL para buscar os dados.
+        *   `encoding`: { `x`: {"field": "regiao", "type": "nominal"}, `y`: {"field": "vendas_total", "type": "quantitative"} }
+        *   `title`: "Vendas por Região (Último Trimestre)"
+    2.  **Frontend:** A interface do chat recebe este JSON. Um componente React/Vue/Angular dedicado a gráficos usa uma biblioteca como **Plotly.js** ou **Vega-Embed** para renderizar o gráfico interativo a partir da especificação.
+
+*   **Certificação de Implementação:**
+    *   **Justificativa:** Esta arquitetura é superior porque separa as responsabilidades. O LLM foca no que faz de melhor (processar linguagem), enquanto a biblioteca de frontend foca no que faz de melhor (renderizar gráficos interativos e performáticos).
+    *   **Trade-offs:**
+        *   **Alternativa Descartada:** Gerar uma imagem estática (PNG com Matplotlib/Seaborn) no backend.
+        *   **Prós da Alternativa:** Simplicidade inicial de implementação no backend.
+        *   **Contras da Alternativa (e por que foi descartada):** Viola diretamente a **Feature 4.2.3 (Interatividade)**. É uma experiência "morta", não permite filtros ou exploração. Cada pequena alteração (ex: mudar de barras para linhas) exigiria uma nova consulta ao backend, violando o **NFR de Desempenho** (<3s).
+    *   **Alinhamento com Requisitos:**
+        *   **Feature 4.2.3 (Interatividade):** Atendido nativamente.
+        *   **Desempenho:** A renderização no cliente é rápida, e interações como zoom ou tooltip não exigem novas chamadas de rede.
+        *   **Escalabilidade:** O backend apenas envia um JSON leve, reduzindo a carga do servidor e a latência de rede.
+
+#### **3.3. Modelo de Interação (Estático vs. Interativo)**
+
+O modelo deve ser **interativo na conversa**.
+
+*   **Proposta:** O gráfico deve ser um componente rico e explorável dentro do feed da conversa, não um link para um dashboard externo ou uma imagem estática. O usuário não deve sentir que está "saindo" do chat.
+
+*   **Certificação de Implementação:**
+    *   **Justificativa:** Manter o usuário no fluxo da conversa é crucial para a **Usabilidade (NFR)** e para a visão do produto de "tornar o processo tão simples quanto conversar". Um link externo quebra o fluxo e adiciona carga cognitiva.
+    *   **Trade-offs:**
+        *   **Alternativa Descartada:** Enviar um link para um dashboard completo.
+        *   **Prós da Alternativa:** Reutiliza uma interface de dashboard já existente.
+        *   **Contras da Alternativa (e por que foi descartada):** É uma solução preguiçosa que não resolve o problema central da integração conversacional. Para perguntas rápidas como a de Carlos ("ver um gráfico de barras"), ser forçado a abrir um dashboard completo é uma experiência ruim e desalinhada com a simplicidade prometida.
+    *   **Alinhamento com Requisitos:**
+        *   **Visão do Produto (2.1):** Mantém a interação com dados dentro da interface principal.
+        *   **Usabilidade (NFR):** Reduz o número de cliques e mudanças de contexto para obter um insight.
+
+#### **3.4. Tratamento de Ambiguidade e Desambiguação**
+
+A estratégia deve ser proativa e baseada no Catálogo de Dados.
+
+*   **Proposta:** Implementar uma camada de "Slot Filling" (Preenchimento de Lacunas) antes da geração da consulta.
+    1.  **Análise da Intenção:** O agente identifica a intenção ("visualizar dados") e as entidades ("vendas", "último trimestre").
+    2.  **Verificação de Lacunas:** O sistema consulta o **Catálogo de Dados (Feature 4.3.2)** para entender que a métrica "vendas" pode ser quebrada por dimensões como `região`, `produto`, `canal_de_venda`. Ele percebe que uma dimensão é necessária para um gráfico útil.
+    3.  **Geração de Perguntas de Esclarecimento:** Com base nas dimensões disponíveis no catálogo para aquela métrica, o agente gera as perguntas de desambiguação e as apresenta como botões, como descrito no UX Flow.
+
+*   **Certificação de Implementação:**
+    *   **Justificativa:** Esta abordagem transforma o agente de um "adivinhador" em um "assistente colaborativo". Isso aumenta drasticamente a precisão das respostas e a confiança do usuário.
+    *   **Trade-offs:**
+        *   **Alternativa Descartada:** Tentar adivinhar a dimensão mais provável (ex: sempre agrupar por tempo).
+        *   **Prós da Alternativa:** Menos um passo para o usuário.
+        *   **Contras da Alternativa (e por que foi descartada):** Adivinhações erradas são extremamente frustrantes e levam o usuário a abandonar a ferramenta. O custo de uma pergunta de esclarecimento é muito menor que o custo de um gráfico inútil.
+    *   **Alinhamento com Requisitos:**
+        *   **Meta de Produto (2.3):** Essencial para atingir ">95% de precisão".
+        *   **Feature 4.3.2 (Catálogo de Dados):** Torna o catálogo um componente ativo e central da arquitetura, não apenas um repositório passivo.
+
+### **4. Recomendações Técnicas e de Arquitetura**
+
+*   **Pilha de Tecnologia (Stack):**
+    *   **Backend:** Python com FastAPI (pela performance e facilidade de uso para APIs) ou Node.js com TypeScript.
+    *   **Frontend:** React ou Vue.js.
+    *   **Bibliotecas de Gráfico:** **Plotly.js** é uma excelente escolha por seu suporte robusto a especificações JSON e interatividade nativa. Vega-Lite é uma alternativa poderosa e mais declarativa.
+    *   **Cache:** Utilizar Redis para cachear tanto os resultados de consultas de dados quanto, potencialmente, as especificações de gráficos para perguntas recorrentes.
+
+*   **Arquitetura de Serviços:**
+    *   **Proposta:** Adotar uma arquitetura orientada a serviços desde o início, mesmo que não sejam microsserviços completos.
+        1.  **Serviço de Interface (Frontend):** O aplicativo web Streamlit/React.
+        2.  **Serviço de Orquestração (BFF - Backend for Frontend):** Recebe as requisições do chat, gerencia o estado da conversa e orquestra as chamadas para outros serviços.
+        3.  **Serviço do Agente (PLN):** Responsável por interpretar o texto, gerenciar a desambiguação e gerar a especificação do gráfico/consulta.
+        4.  **API de Dados:** Um serviço seguro que executa as consultas no banco de dados e aplica as regras de **RBAC (Feature 4.4.2)**, garantindo que um usuário só veja os dados que tem permissão.
+
+*   **Certificação de Implementação:**
+    *   **Justificativa:** Esta arquitetura desacoplada permite que cada componente escale de forma independente. Se a geração de PLN se tornar um gargalo, o **Serviço do Agente** pode ser escalado sem afetar o resto do sistema.
+    *   **Alinhamento com Requisitos:**
+        *   **Escalabilidade (NFR):** Atendido pela separação de preocupações.
+        *   **Segurança (NFR):** A centralização do acesso a dados na **API de Dados** torna a implementação e auditoria do RBAC muito mais simples e segura.
+        *   **Confiabilidade (NFR):** Falhas em um serviço (ex: o Agente) podem ser tratadas de forma mais graciosa sem derrubar todo o sistema.
+
+### **5. Plano de Ação Sugerido (Roadmap Simplificado)**
+
+**Fase 1: MVP - Validar o Core Loop (1-2 meses)**
+*   **Foco:** Provar que o fluxo "Pergunta -> Resposta Correta" funciona para um escopo limitado.
+*   **Features do PRD:**
+    *   `4.1.1 (PLN)`: Focado em um subconjunto de perguntas (ex: apenas vendas e faturamento).
+    *   `4.1.2 (Geração de Respostas)`: Gerar respostas de texto, números e **gráficos estáticos (PNG)** como uma primeira etapa para validar a lógica de dados.
+    *   `4.4.1 (Autenticação)` e `4.4.2 (RBAC)`: Segurança é inegociável desde o início.
+*   **Meta:** Permitir que a persona **Carlos (Diretor)** faça perguntas simples e receba um gráfico correto, mesmo que não interativo.
+
+**Fase 2: Versão 1.0 - Lançamento com Experiência Interativa (Próximos 3-4 meses)**
+*   **Foco:** Implementar a estratégia de gráficos conversacionais completa e enriquecer a experiência.
+*   **Features do PRD:**
+    *   Implementar a **arquitetura de especificação de gráfico (JSON)** e os **gráficos interativos (Feature 4.2.3)** no chat.
+    *   Implementar a **estratégia de desambiguação** baseada no catálogo.
+    *   `4.3.2 (Gerenciamento de Catálogo)`: Construir a interface para os Admins gerenciarem os metadados.
+    *   `4.1.3 (Histórico de Conversas)`.
+*   **Meta:** Atender plenamente às necessidades da persona **Ana (Analista)**, que precisa de exploração e interatividade.
+
+**Fase 3: Pós-Lançamento - Escala e Otimização (Contínuo)**
+*   **Foco:** Melhorar a inteligência do agente, a performance e a governança.
+*   **Features do PRD:**
+    *   `4.2.1 (Dashboard Principal)`: Permitir que os usuários "fixem" gráficos gerados na conversa em um dashboard pessoal.
+    *   `4.3.1 (Monitoramento de Pipeline)`.
+    *   `4.4.3 (Painel de Administração)`.
+*   **Meta:** Atingir os NFRs de **Escalabilidade** e **Confiabilidade (99.9%)** e aumentar a **adoção (Meta 2.2)** em toda a organização.
+
+---
+
+Espero que este relatório forneça a clareza e a direção estratégica necessárias. Estou à disposição para discutir qualquer um desses pontos em maior profundidade.
+[CÓDIGO-FONTE PARA ANÁLISE](INSTRUÇÃO: COLOQUE AQUI OS FICHEIROS DE CÓDIGO ATUAIS MAIS RELEVANTES PARA A REFATORAÇÃO)
+Arquivo: core/agents/supervisor_agent.py (se ainda existir, para extrair a lógica)
+# core/agents/supervisor_agent.py
 import logging
-from typing import List, Dict, Any
+from typing import List, Dict, Any # Import necessary types
+
+from core.llm_base import BaseLLMAdapter
+from core.agents.tool_agent import ToolAgent
+from core.agents.code_gen_agent import CodeGenAgent
+
+class SupervisorAgent:
+    """
+    Agente supervisor que roteia a consulta do usuário para o agente especialista apropriado.
+    """
+    def __init__(self, llm_adapter: BaseLLMAdapter):
+        """
+        Inicializa o supervisor, o ToolAgent, o CodeGenAgent e o LLM de roteamento.
+        """
+        self.logger = logging.getLogger(__name__)
+        self.routing_llm = llm_adapter # Use o adaptador injetado
+        self.tool_agent = ToolAgent(llm_adapter=llm_adapter)
+        self.code_gen_agent = CodeGenAgent(llm_adapter=llm_adapter)
+        self.logger.info("SupervisorAgent inicializado com os agentes especialistas.")
+
+    def _build_routing_prompt(self, query: str) -> List[Dict[str, str]]:
+        """
+        Constrói o prompt para o LLM de roteamento decidir qual agente usar.
+        Retorna uma lista de mensagens no formato esperado pela API do OpenAI.
+        """
+        system_message = {
+            "role": "system",
+            "content": "Você é um agente supervisor responsável por rotear consultas de usuários para o agente especialista correto."
+        }
+        user_message = {
+            "role": "user",
+            "content": f"""
+            Você tem dois agentes especialistas disponíveis:
+            1.  **ToolAgent**: Este agente usa um conjunto de ferramentas predefinidas para responder a perguntas simples sobre os dados, como procurar informações específicas (por exemplo, o preço de um produto) ou obter o esquema do banco de dados. É rápido e eficiente para consultas diretas.
+            2.  **CodeGenAgent**: Este agente gera e executa código Python para responder a perguntas complexas que exigem análise de dados, agregações, cálculos ou visualizações (gráficos). É poderoso, mas mais lento.
+
+            Sua tarefa é analisar a consulta do usuário e decidir qual agente é mais adequado.
+
+            - Se a consulta for uma pergunta simples que pode ser respondida consultando informações diretas, encaminhe para o **ToolAgent**.
+            - Se a consulta exigir análise complexa, cálculos, agregações ou a geração de um gráfico, encaminhe para o **CodeGenAgent**.
+
+            Com base na consulta abaixo, qual agente deve ser usado? Responda com apenas uma palavra: "tool" ou "code".
+
+            **Exemplos:**
+
+            Consulta: "Qual o preço do produto 'Camisa Polo Azul'?"
+            Resposta: tool
+
+            Consulta: "Liste todas as categorias de produtos."
+            Resposta: tool
+
+            Consulta: "Qual a data da última venda do produto com ID 123?"
+            Resposta: tool
+
+            Consulta: "Mostre um gráfico de vendas por mês no último ano."
+            Resposta: code
+
+            Consulta: "Calcule a média de vendas por região."
+            Resposta: code
+
+            Consulta: "Qual o produto mais vendido no trimestre anterior e qual o seu faturamento total?"
+            Resposta: code
+
+            **Consulta do Usuário:** "{query}"
+            """
+        }
+        return [system_message, user_message]
+
+    def route_query(self, query: str) -> dict:
+        """
+        Analisa a consulta, roteia para o agente apropriado e retorna a resposta.
+        """
+        self.logger.info(f"Roteando a consulta: '{query}'")
+
+        routing_messages = self._build_routing_prompt(query)
+        
+        # Call get_completion with messages and extract content
+        llm_response = self.routing_llm.get_completion(messages=routing_messages)
+        
+        if "error" in llm_response:
+            self.logger.error(f"Erro interno ao rotear a consulta: {llm_response['error']}")
+            self.logger.warning("Não foi possível determinar o agente apropriado. Tentando com o ToolAgent.")
+            return self.tool_agent.process_query(query)
+
+        routing_decision = llm_response.get("content", "").strip().lower()
+
+        self.logger.info(f"Decisão de roteamento: {routing_decision}")
+
+        if "tool" in routing_decision:
+            self.logger.info("Encaminhando para o ToolAgent.")
+            return self.tool_agent.process_query(query)
+        elif "code" in routing_decision:
+            self.logger.info("Encaminhando para o CodeGenAgent.")
+            return self.code_gen_agent.generate_and_execute_code(query)
+        else:
+            self.logger.warning(f"Decisão de roteamento inválida: '{routing_decision}'. Usando ToolAgent como padrão.")
+            return self.tool_agent.process_query(query)
+Arquivo: core/agents/caculinha_bi_agent.py (o placeholder atual)
+import logging
+import re
+import json # Added import
+import uuid # Added import
+from typing import List, Dict, Any, Tuple
+import pandas as pd
+import os
 from langchain_core.tools import tool
+from langchain_core.runnables import Runnable, RunnableLambda
+from langchain_core.messages import HumanMessage, AIMessage, ToolMessage, ToolCall
+from langchain_core.prompts import ChatPromptTemplate
+from langchain_openai import ChatOpenAI
+from core.llm_langchain_adapter import CustomLangChainLLM
+
 from core.connectivity.base import DatabaseAdapter
+from core.config.settings import settings # Import the settings instance
 
 logger = logging.getLogger(__name__)
 
-@tool
-def fetch_data_from_query(query: str, db_adapter: DatabaseAdapter) -> List[Dict[str, Any]]:
+def create_caculinha_bi_agent(
+    parquet_dir: str,
+    code_gen_agent: Any, # Use Any for now to avoid circular imports
+    llm_adapter: Any # Add llm_adapter for tool selection
+) -> Tuple[Runnable, List]:
     """
-    Executa uma query SQL no banco de dados e retorna os dados brutos.
+    Cria um agente de BI substituto e suas ferramentas, com o adaptador de banco de dados injetado.
 
     Args:
-        query: A string contendo a query SQL a ser executada.
-        db_adapter: Uma instância de um adaptador de banco de dados que segue a
-                    interface DatabaseAdapter para executar a query.
+        db_adapter: Uma instância que segue a interface DatabaseAdapter.
 
     Returns:
-        Uma lista de dicionários, onde cada dicionário representa uma linha
-        do resultado da query. Retorna uma lista vazia se não houver resultados
-        ou um dicionário de erro em caso de falha.
+        Uma tupla contendo o agente executável e a lista de suas ferramentas.
     """
-    logger.info(f"Executando a query: {query}")
+
+    from core.tools.data_tools import query_product_data, list_table_columns
+
+    @tool
+    def generate_and_execute_python_code(query: str) -> Dict[str, Any]:
+        """Gera e executa código Python para análises complexas e gráficos."""
+        logger.info(f"Gerando e executando código Python para a consulta: {query}")
+        return code_gen_agent.generate_and_execute_code(query)
+
+    # A lista de ferramentas agora é definida dentro do escopo que tem acesso ao db_adapter
+    bi_tools = [query_product_data, list_table_columns, generate_and_execute_python_code]
+
+    # --- LLM para Geração de SQL ---
+    sql_gen_llm = ChatOpenAI(
+        model=settings.LLM_MODEL_NAME,
+        openai_api_key=settings.OPENAI_API_KEY.get_secret_value(),
+        temperature=0,
+    )
+
+    # Get parquet schema
+    # This is a simplified way to get schema from parquet.
+    # In a real scenario, you might have a metadata store for parquet files.
+    parquet_schema = {}
     try:
-        # Assumindo que o db_adapter tem um método execute_query
-        result = db_adapter.execute_query(query)
-        if result is None:
-            logger.warning("A execução da query não retornou resultados.")
-            return []
-        logger.info(f"Query executada com sucesso. {len(result)} linhas retornadas.")
-        return result
+        df_sample = pd.read_parquet(os.path.join(parquet_dir, "ADMAT_REBUILT.parquet"), columns=[])
+        for col in df_sample.columns:
+            parquet_schema[col] = str(df_sample[col].dtype)
     except Exception as e:
-        logger.error(f"Erro ao executar a query SQL: {e}", exc_info=True)
-        # Retornar um formato de erro consistente que pode ser tratado pelo agente
-        return [{"error": "Falha ao executar a consulta no banco de dados.", "details": str(e)}]
-Ficheiro 2: core/agents/bi_agent_nodes.py"""
-Nós (estados) para o StateGraph da arquitetura avançada do Agent_BI.
-Cada função representa um passo no fluxo de processamento da consulta.
-As dependências (como adaptadores de LLM e DB) são injetadas pelo GraphBuilder.
+        logger.error(f"Erro ao inferir esquema do parquet: {e}")
+        parquet_schema = {"error": "Não foi possível inferir o esquema do parquet."}
+    
+    schema_str = "\n".join([f"- {col}: {dtype}" for col, dtype in parquet_schema.items()]) # Convert schema to string for the prompt
+
+    sql_gen_prompt = ChatPromptTemplate.from_messages(
+        [
+            (
+                "system",
+                """Você é um assistente de BI. Sua tarefa é converter a consulta em linguagem natural do usuário em um objeto JSON que representa os filtros para consultar o arquivo ADMAT_REBUILT.parquet.
+O arquivo está localizado em 'C:/Users/André/Documents/Agent_BI/data/parquet_cleaned/ADMAT_REBUILT.parquet'.
+
+Use o seguinte esquema de dados (coluna: tipo) para gerar os filtros JSON:
+{tables}
+
+**IMPORTANTE: Para o código do produto, use a coluna 'CÓDIGO' (com acento e maiúsculas) conforme o schema do Parquet.**
+
+Retorne APENAS o objeto JSON. Não inclua explicações ou qualquer outro texto.
+O JSON deve ter a seguinte estrutura:
+{{
+    "target_file": "ADMAT_REBUILT.parquet",
+    "filters": [
+        {{"column": "nome_da_coluna", "operator": "operador", "value": "valor"}}
+    ]
+}}
+
+Operadores suportados: "==", "!=", ">", "<", "contains".
+Para buscas em colunas de texto (string), sempre use o operador "contains".
+Para buscas em colunas numéricas, use "==", "!=", ">", "<".
+
+Exemplo 1:
+Consulta: Qual é o preço do produto 369947?
+JSON:
+```json
+{{
+    "target_file": "ADMAT_REBUILT.parquet",
+    "filters": [
+        {{"column": "CÓDIGO", "operator": "==", "value": 369947}}
+    ]
+}}
+```
+
+Exemplo 2:
+Consulta: Liste todos os produtos da categoria 'Eletrônicos' com preço maior que 100.
+JSON:
+```json
+{{
+    "target_file": "ADMAT_REBUILT.parquet",
+    "filters": [
+        {{"column": "categoria", "operator": "contains", "value": "Eletrônicos"}},
+        {{"column": "preco_38_percent", "operator": ">", "value": 100}}
+    ]
+}}
+```
+
+Exemplo 3:
+Consulta: Mostre os produtos com vendas nos últimos 30 dias maiores que 50.
+JSON:
+```json
+{{
+    "target_file": "ADMAT_REBUILT.parquet",
+    "filters": [
+        {{"column": "VEND# QTD 30D", "operator": ">", "value": 50}}
+    ]
+}}
+```
+
+
 """
-import logging
-from typing import Dict, Any, List
+            ),
+            ("user", "{query}")
+        ]
+    )
 
-from core.agent_state import AgentState
-from core.llm_base import BaseLLMAdapter
-from core.agents.code_gen_agent import CodeGenAgent
-from core.tools.data_tools import fetch_data_from_query
-from core.connectivity.base import DatabaseAdapter
+    sql_generator_chain = sql_gen_prompt | sql_gen_llm
 
-logger = logging.getLogger(__name__)
+    def agent_runnable_logic(state: Dict[str, Any]) -> Dict[str, Any]:
+        last_message = state["messages"][-1]
 
-def classify_intent(state: AgentState, llm_adapter: BaseLLMAdapter) -> Dict[str, Any]:
-    """
-    Classifica a intenção do usuário usando um LLM e extrai entidades.
-    Atualiza o estado com o plano de ação.
-    """
-    logger.info("Nó: classify_intent")
-    user_query = state['messages'][-1].content
-    
-    prompt = f"""
-    Você é um roteador inteligente. Analise a consulta do usuário e classifique a intenção principal.
-    As intenções possíveis são:
-    - 'gerar_grafico': O usuário quer uma visualização de dados (gráfico, plot, etc.).
-    - 'consulta_sql_complexa': A pergunta requer uma consulta SQL com agregações, junções ou lógica complexa.
-    - 'resposta_simples': A pergunta pode ser respondida com uma consulta SQL simples ou uma resposta direta.
+        if isinstance(last_message, HumanMessage):
+            user_query = last_message.content
+            logger.info(f"Agente de BI recebeu a consulta: {user_query}")
 
-    Extraia também as entidades principais da consulta, como métricas, dimensões e filtros.
+            # LLM para decisão de ferramenta
+            tool_selection_llm = CustomLangChainLLM(llm_adapter=llm_adapter)
 
-    Consulta: "{user_query}"
+            tool_selection_prompt = ChatPromptTemplate.from_messages(
+                [
+                    (
+                        "system",
+                        "Você é um assistente de BI. Sua tarefa é decidir qual ferramenta usar para responder à consulta do usuário. As ferramentas disponíveis são:\n" 
+                        "- `query_product_data`: Para consultas que podem ser respondidas buscando dados específicos de produtos com filtros (ex: buscar preço de produto, listar produtos por categoria).\n" 
+                        "- `list_table_columns`: Para listar todas as colunas de uma tabela (arquivo Parquet) específica.\n" 
+                        "- `generate_and_execute_python_code`: Para análises complexas, cálculos, agregações ou geração de gráficos que exigem código Python.\n\n" 
+                        "Retorne APENAS o nome da ferramenta: `query_product_data`, `list_table_columns` ou `generate_and_execute_python_code`.",
+                    ),
+                    ("user", "{query}"),
+                ]
+            )
 
-    Responda em formato JSON com as chaves 'intent' e 'entities'.
-    Exemplo:
-    Consulta: "Mostre um gráfico de barras das vendas por região"
-    {{
-        "intent": "gerar_grafico",
-        "entities": {{
-            "metric": "vendas",
-            "dimension": "região",
-            "chart_type": "barras"
-        }}
-    }}
-    """
-    
-    response = llm_adapter.get_completion(messages=[{"role": "user", "content": prompt}])
-    # Supondo que a resposta do LLM seja um JSON em 'content'
-    plan = response.get("content", {}) 
-    
-    return {"plan": plan, "intent": plan.get("intent")}
+            tool_selection_chain = tool_selection_prompt | tool_selection_llm
+            
+            # Decide qual ferramenta usar
+            tool_decision_message = tool_selection_chain.invoke({"query": user_query})
+            tool_decision = tool_decision_message.content.strip()
+            logger.info(f"Decisão da ferramenta: {tool_decision}")
 
-def clarify_requirements(state: AgentState) -> Dict[str, Any]:
-    """
-    Verifica se informações para um gráfico estão faltando e, se necessário,
-    prepara um pedido de esclarecimento para o usuário.
-    """
-    logger.info("Nó: clarify_requirements")
-    plan = state.get("plan", {})
-    entities = plan.get("entities", {})
+            if "query_product_data" in tool_decision:
+                # Gerar JSON de filtros e retornar ToolCall
+                generated_json_message = sql_generator_chain.invoke({"query": user_query, "tables": schema_str})
+                generated_json_content = generated_json_message.content.strip()
+                
+                json_match = re.search(r"```json\n(.*?)```", generated_json_content, re.DOTALL)
+                if json_match:
+                    json_str = json_match.group(1).strip()
+                else:
+                    json_str = generated_json_content
+                
+                try:
+                    parsed_json = json.loads(json_str)
+                    target_file = parsed_json.get("target_file", "ADMAT_REBUILT.parquet")
+                    filters = parsed_json.get("filters", [])
+                    logger.info(f"JSON de filtros gerado: {parsed_json}")
+                    
+                    # Return AIMessage encapsulating ToolCall for query_product_data
+                    return {"messages": state["messages"] + [AIMessage(content="", tool_calls=[ToolCall(id=str(uuid.uuid4()), name="query_product_data", args={"target_file": target_file, "filters": filters})])]}
+                except json.JSONDecodeError as e:
+                    logger.error(f"Erro ao decodificar JSON gerado: {e}. Conteúdo: {json_str}")
+                    return {"messages": state["messages"] + [AIMessage(content=f"Desculpe, não consegui processar sua consulta devido a um erro na geração dos filtros: {e}")]}
 
-    if state.get("intent") == "gerar_grafico":
-        missing_info = []
-        if not entities.get("dimension"):
-            missing_info.append("dimensão (ex: por categoria, por data)")
-        if not entities.get("metric"):
-            missing_info.append("métrica (ex: total de vendas, quantidade)")
-        if not entities.get("chart_type"):
-            missing_info.append("tipo de gráfico (ex: barras, linhas, pizza)")
+            elif "list_table_columns" in tool_decision:
+                table_name = "ADMAT_REBUILT" # This needs to be dynamically extracted in a real scenario
+                logger.info(f"Listando colunas para a tabela: {table_name}")
+                # Return AIMessage encapsulating ToolCall for list_table_columns
+                return {"messages": state["messages"] + [AIMessage(content="", tool_calls=[ToolCall(id=str(uuid.uuid4()), name="list_table_columns", args={"table_name": table_name})])]}
 
-        if missing_info:
-            options = {
-                "message": f"Para gerar o gráfico, preciso que você especifique: {', '.join(missing_info)}.",
-                "choices": {
-                    "dimensions": ["Por Categoria", "Por Mês", "Por Região"],
-                    "chart_types": ["Barras", "Linhas", "Pizza"]
-                }
-            }
-            return {"clarification_needed": True, "clarification_options": options}
+            elif "generate_and_execute_python_code" in tool_decision:
+                # Return AIMessage encapsulating ToolCall for CodeGenAgent
+                return {"messages": state["messages"] + [AIMessage(content="", tool_calls=[ToolCall(id=str(uuid.uuid4()), name="generate_and_execute_python_code", args={"query": user_query})])]}
+            else:
+                return {"messages": [AIMessage(content="Desculpe, não consegui determinar a ferramenta apropriada para sua consulta.")]}
 
-    return {"clarification_needed": False}
-
-def generate_sql_query(state: AgentState, code_gen_agent: CodeGenAgent) -> Dict[str, Any]:
-    """
-    Gera uma consulta SQL a partir da pergunta do usuário usando o CodeGenAgent.
-    """
-    logger.info("Nó: generate_sql_query")
-    user_query = state['messages'][-1].content
-    
-    # O CodeGenAgent é reutilizado para gerar SQL em vez de Python
-    # Isso pode exigir um prompt específico para o CodeGenAgent
-    response = code_gen_agent.generate_code(user_query, "sql") # Assumindo que o método aceita um tipo de código
-    sql_query = response.get("output", "")
-
-    return {"sql_query": sql_query}
-
-def execute_query(state: AgentState, db_adapter: DatabaseAdapter) -> Dict[str, Any]:
-    """
-    Executa a query SQL do estado usando a ferramenta fetch_data_from_query.
-    """
-    logger.info("Nó: execute_query")
-    sql_query = state.get("sql_query")
-    if not sql_query:
-        return {"raw_data": [{"error": "Nenhuma query SQL para executar."}]}
-    
-    # Chama a ferramenta diretamente, passando o adaptador
-    raw_data = fetch_data_from_query.func(query=sql_query, db_adapter=db_adapter)
-    
-    return {"raw_data": raw_data}
-
-def generate_plotly_spec(state: AgentState) -> Dict[str, Any]:
-    """
-    Transforma os dados brutos do estado em uma especificação JSON para Plotly.
-    """
-    logger.info("Nó: generate_plotly_spec")
-    raw_data = state.get("raw_data")
-    plan = state.get("plan", {})
-    entities = plan.get("entities", {})
-
-    if not raw_data or "error" in raw_data[0]:
-        return {"final_response": "Não foi possível obter dados para gerar o gráfico."}
-
-    # Lógica simplificada para criar a especificação do Plotly
-    # Em um caso real, isso seria muito mais robusto
-    dimension = entities.get("dimension")
-    metric = entities.get("metric")
-    chart_type = entities.get("chart_type", "bar")
-
-    if not dimension or not metric:
-        return {"final_response": "Não foi possível determinar a dimensão e a métrica para o gráfico."}
-
-    x_values = [row[dimension] for row in raw_data]
-    y_values = [row[metric] for row in raw_data]
-
-    plotly_spec = {
-        "data": [{
-            "x": x_values,
-            "y": y_values,
-            "type": chart_type
-        }],
-        "layout": {
-            "title": f"{metric.title()} por {dimension.title()}"
-        }
-    }
-    
-    return {"plotly_spec": plotly_spec}
-
-def format_final_response(state: AgentState) -> Dict[str, Any]:
-    """
-    Formata a resposta final para o usuário, seja texto, dados ou um gráfico.
-    """
-    logger.info("Nó: format_final_response")
-    if state.get("clarification_needed"):
-        response = {
-            "type": "clarification",
-            "content": state.get("clarification_options")
-        }
-    elif state.get("plotly_spec"):
-        response = {
-            "type": "chart",
-            "content": state.get("plotly_spec")
-        }
-    elif state.get("raw_data"):
-        response = {
-            "type": "data",
-            "content": state.get("raw_data")
-        }
-    else:
-        # Resposta padrão ou de erro
-        response = {
-            "type": "text",
-            "content": "Não consegui processar sua solicitação. Tente novamente."
-        }
-        
-    return {"final_response": response}
-Ficheiro 3: core/graph/graph_builder.py"""
-Construtor do StateGraph para a arquitetura avançada do Agent_BI.
-Este módulo reescrito define a máquina de estados finitos que orquestra
-o fluxo de tarefas, conectando os nós definidos em 'bi_agent_nodes.py'.
-"""
-import logging
-from functools import partial
-from langgraph.graph import StateGraph, END
-
-from core.agent_state import AgentState
-from core.llm_base import BaseLLMAdapter
-from core.connectivity.base import DatabaseAdapter
-from core.agents.code_gen_agent import CodeGenAgent
-from core.agents import bi_agent_nodes
-
-logger = logging.getLogger(__name__)
-
-class GraphBuilder:
-    """
-    Constrói e compila o grafo de execução do LangGraph, implementando a
-    lógica da máquina de estados para o fluxo de BI.
-    """
-
-    def __init__(self, llm_adapter: BaseLLMAdapter, db_adapter: DatabaseAdapter, code_gen_agent: CodeGenAgent):
-        """
-        Inicializa o construtor com as dependências necessárias (injeção de dependência).
-        """
-        self.llm_adapter = llm_adapter
-        self.db_adapter = db_adapter
-        self.code_gen_agent = code_gen_agent
-
-    def _decide_after_intent_classification(self, state: AgentState) -> str:
-        """
-        Aresta condicional que roteia o fluxo após a classificação da intenção.
-        """
-        intent = state.get("intent")
-        if intent == "gerar_grafico":
-            return "clarify_requirements"
-        elif intent == "consulta_sql_complexa":
-            return "generate_sql_query"
-        else: # resposta_simples ou fallback
-            return "generate_sql_query" # Simplificado: sempre gera SQL por enquanto
-
-    def _decide_after_clarification(self, state: AgentState) -> str:
-        """
-        Aresta condicional que decide o fluxo após a verificação de requisitos.
-        """
-        if state.get("clarification_needed"):
-            return "format_final_response"  # Termina para pedir input ao usuário
+        elif isinstance(last_message, ToolMessage):
+            # This path is taken after a tool has been executed by the ToolNode.
+            # The agent needs to process the tool's output and generate an AIMessage.
+            # The AIMessage generation is now handled by process_bi_tool_output_func in graph_builder.py
+            return state
         else:
-            return "generate_sql_query"
+            # Handle other unexpected message types
+            formatted_output = f"Erro: Tipo de mensagem inesperado no estado: {type(last_message)}"
+            logger.error(formatted_output)
+            return {"messages": state["messages"] + [AIMessage(content=formatted_output)]}
 
-    def build(self):
-        """
-        Constrói, define as arestas e compila o StateGraph.
-        """
-        workflow = StateGraph(AgentState)
+    # O runnable é a própria lógica do agente
+    agent_runnable = RunnableLambda(agent_runnable_logic)
 
-        # Vincula as dependências aos nós usando functools.partial
-        classify_intent_node = partial(bi_agent_nodes.classify_intent, llm_adapter=self.llm_adapter)
-        generate_sql_query_node = partial(bi_agent_nodes.generate_sql_query, code_gen_agent=self.code_gen_agent)
-        execute_query_node = partial(bi_agent_nodes.execute_query, db_adapter=self.db_adapter)
+    return agent_runnable, bi_tools
 
-        # Adiciona os nós (estados) ao grafo
-        workflow.add_node("classify_intent", classify_intent_node)
-        workflow.add_node("clarify_requirements", bi_agent_nodes.clarify_requirements)
-        workflow.add_node("generate_sql_query", generate_sql_query_node)
-        workflow.add_node("execute_query", execute_query_node)
-        workflow.add_node("generate_plotly_spec", bi_agent_nodes.generate_plotly_spec)
-        workflow.add_node("format_final_response", bi_agent_nodes.format_final_response)
 
-        # Define o ponto de entrada
-        workflow.set_entry_point("classify_intent")
-
-        # Adiciona as arestas (transições entre estados)
-        workflow.add_conditional_edge(
-            "classify_intent",
-            self._decide_after_intent_classification,
-            {
-                "clarify_requirements": "clarify_requirements",
-                "generate_sql_query": "generate_sql_query",
-            }
-        )
-        workflow.add_conditional_edge(
-            "clarify_requirements",
-            self._decide_after_clarification,
-            {
-                "format_final_response": "format_final_response",
-                "generate_sql_query": "generate_sql_query",
-            }
-        )
-        workflow.add_edge("generate_sql_query", "execute_query")
-        workflow.add_edge("execute_query", "generate_plotly_spec") # Simplificado: sempre tenta gerar gráfico
-        workflow.add_edge("generate_plotly_spec", "format_final_response")
-        
-        # O nó final aponta para o fim do grafo
-        workflow.add_edge("format_final_response", END)
-
-        # Compila o grafo em uma aplicação executável
-        app = workflow.compile()
-        logger.info("Grafo LangGraph da arquitetura avançada compilado com sucesso!")
-        return app
-Ficheiro 4: main.py"""
-API Gateway (Backend) para o Agent_BI usando FastAPI.
-Este arquivo substitui a lógica anterior e serve como o ponto de entrada
-principal para todas as interações do frontend.
-"""
-import uvicorn
+Arquivo: core/graph/graph_builder.py (a versão atual)
 import logging
-from fastapi import FastAPI, HTTPException
-from pydantic import BaseModel
+from typing import Literal, Any
+import json
+import plotly.io as pio
 
-# Importações dos componentes da nova arquitetura
-from core.graph.graph_builder import GraphBuilder
-from core.config.settings import settings
-from core.llm_adapter import OpenAILLMAdapter
-from core.connectivity.sql_server_adapter import SQLServerAdapter
-from core.agents.code_gen_agent import CodeGenAgent # Supondo que ele exista e seja importável
+from langchain_core.messages import AIMessage, ToolMessage, BaseMessage
+from langgraph.graph import END, StateGraph
+from langgraph.prebuilt import ToolNode
 
-# Configuração de logging
+from core.agent_state import AgentState
+from core.agents.caculinha_bi_agent import create_caculinha_bi_agent
+from core.agents.code_gen_agent import CodeGenAgent
+from core.config.settings import Settings
+from core.connectivity.base import DatabaseAdapter
+
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-# --- Modelos de Dados da API (Pydantic) ---
-class QueryRequest(BaseModel):
-    user_query: str
-    session_id: str # Para gerenciar o estado da conversa
 
-class QueryResponse(BaseModel):
-    response: dict # A resposta final do grafo
+class GraphBuilder:
+    """Encapsula a lógica de construção do grafo LangGraph com injeção de dependência."""
 
-# --- Inicialização da Aplicação e Dependências ---
+    def __init__(self, settings: Settings, db_adapter: DatabaseAdapter, code_gen_agent: CodeGenAgent, llm_adapter: Any):
+        """
+        Inicializa o construtor do grafo com as dependências necessárias.
+        """
+        self.settings = settings
+        self.db_adapter = db_adapter
+        self.code_gen_agent = code_gen_agent
+        self.llm_adapter = llm_adapter
+        self.bi_agent_runnable, bi_tools = create_caculinha_bi_agent(self.settings.PARQUET_DIR, self.code_gen_agent, self.llm_adapter)
+        self.bi_tool_node = ToolNode(bi_tools)
+
+    def bi_agent_node_func(self, state: AgentState) -> dict:
+        """Executa o agente de BI."""
+        logger.info("--- Nó do Agente de BI ---")
+        agent_output = self.bi_agent_runnable.invoke(state)
+        return agent_output
+
+    def process_bi_tool_output_func(self, state: AgentState) -> dict:
+        """Processa a saída de uma ferramenta de BI e atualiza o estado."""
+        logger.info("--- Nó de Processamento da Saída da Ferramenta de BI ---")
+        last_msg = state["messages"][-1]
+
+        if not isinstance(last_msg, ToolMessage):
+            return {}
+
+        content = last_msg.content
+        tool_name = last_msg.name
+
+        formatted_output = ""
+
+        if tool_name == "generate_and_execute_python_code":
+            processed_content = None
+            if isinstance(content, str):
+                try:
+                    processed_content = json.loads(content)
+                except json.JSONDecodeError:
+                    formatted_output = f"Saída da ferramenta de geração de código não é um JSON válido: {content}"
+            elif isinstance(content, dict):
+                processed_content = content
+
+            if processed_content and isinstance(processed_content, dict):
+                content_type = processed_content.get("type")
+                output = processed_content.get("output")
+
+                if content_type == "chart":
+                    formatted_output = "Gráfico gerado com sucesso e disponível para visualização."
+                    try:
+                        fig = pio.from_json(output)
+                        return {"messages": [AIMessage(content=formatted_output, additional_kwargs={"plotly_fig": fig})]}
+                    except Exception as e:
+                        logger.error(f"Erro ao desserializar a figura Plotly: {e}")
+                        formatted_output = "Erro ao processar o gráfico gerado."
+                elif content_type == "dataframe":
+                    formatted_output = "Dados processados e disponíveis."
+                    return {"messages": [AIMessage(content=formatted_output)], "retrieved_data": output}
+                else:
+                    formatted_output = f"Saída da ferramenta de geração de código com tipo desconhecido: {processed_content}"
+            elif not formatted_output:
+                formatted_output = f"Saída da ferramenta de geração de código não pôde ser processada. Tipo: {type(content)}, Conteúdo: {content}"
+        else:
+            formatted_output = f"Saída de ferramenta desconhecida: {tool_name} - {content}"
+
+        return {"messages": [AIMessage(content=formatted_output)]}
+
+    def route_from_bi_agent(self, state: AgentState) -> Literal["bi_tools", "__end__"]:
+        """Decide se deve chamar as ferramentas de BI ou finalizar."""
+        last_message = state["messages"][-1]
+        if isinstance(last_message, AIMessage) and not last_message.tool_calls:
+            return "__end__"
+        elif isinstance(last_message, BaseMessage) and hasattr(last_message, "tool_calls") and last_message.tool_calls:
+            return "bi_tools"
+        return "__end__"
+
+    def build(self):
+        """Constrói e compila o grafo de execução do LangGraph."""
+        workflow = StateGraph(AgentState)
+
+        workflow.add_node("caculinha_bi_agent", self.bi_agent_node_func)
+        workflow.add_node("bi_tools", self.bi_tool_node)
+        workflow.add_node("process_bi_tool_output", self.process_bi_tool_output_func)
+
+        workflow.set_entry_point("caculinha_bi_agent")
+
+        workflow.add_conditional_edges(
+            "caculinha_bi_agent",
+            self.route_from_bi_agent,
+            {"bi_tools": "bi_tools", "__end__": END},
+        )
+
+        workflow.add_edge("bi_tools", "process_bi_tool_output")
+        workflow.add_edge("process_bi_tool_output", END)
+
+        app = workflow.compile()
+        logger.info("Grafo LangGraph compilado com sucesso com uma arquitetura simplificada!")
+        return app
+Arquivo: main.py (a versão atual)
+# core/main.py
+import uvicorn
+import logging
+import subprocess
+import sys
+from datetime import timedelta
+
+from fastapi import APIRouter, Depends, FastAPI, HTTPException, status
+from fastapi.security import OAuth2PasswordRequestForm
+from apscheduler.schedulers.asyncio import AsyncIOScheduler
+from apscheduler.triggers.cron import CronTrigger
+
+# Módulos locais
+from core import schemas, security
+from core.database import sql_server_auth_db as auth_db
+from core.query_processor import QueryProcessor
+from core.config.logging_config import setup_logging
+
+# --- Configuração Inicial ---
+setup_logging()
+
 app = FastAPI(
-    title="Agent_BI - API Gateway",
-    description="Backend FastAPI para a nova arquitetura com LangGraph.",
-    version="3.0.0"
+    title="Agent_BI Backend",
+    description="Serviço de backend para o Agente de BI, incluindo API de consulta e agendamento de tarefas.",
+    version="2.0.0"
 )
 
-# Instanciação das dependências (pode ser otimizado com injeção de dependência do FastAPI)
-# Para simplificar, instanciamos aqui. Em produção, use singletons ou `Depends`.
-llm_adapter = OpenAILLMAdapter()
-db_adapter = SQLServerAdapter(connection_string=settings.SQL_SERVER_CONNECTION_STRING)
-code_gen_agent = CodeGenAgent(llm_adapter=llm_adapter)
-graph_builder = GraphBuilder(llm_adapter=llm_adapter, db_adapter=db_adapter, code_gen_agent=code_gen_agent)
-agent_graph = graph_builder.build()
+scheduler = AsyncIOScheduler()
+
+# --- Lógica do Pipeline de Dados (Existente) ---
+def get_db_credentials_from_file() -> dict:
+    creds = {}
+    try:
+        with open("conexao.txt", "r") as f:
+            for line in f:
+                if '=' in line:
+                    key, value = line.strip().split('=', 1)
+                    creds[key.strip().lower()] = value.strip().strip("'")
+    except FileNotFoundError:
+        logging.warning("Arquivo conexao.txt não encontrado.")
+    return creds
+
+def trigger_pipeline_subprocess():
+    logging.info("Acionando a execução do pipeline de dados via subprocesso...")
+    creds = get_db_credentials_from_file()
+    if not all(k in creds for k in ['server', 'database', 'user', 'password']):
+        logging.error("Credenciais insuficientes para executar o pipeline.")
+        return
+    command = [sys.executable, "scripts/data_pipeline.py", "--server", creds['server'], "--database", creds['database'], "--user", creds['user'], "--password", creds['password']]
+    try:
+        process = subprocess.run(command, capture_output=True, text=True, check=True)
+        logging.info(f"Subprocesso do pipeline executado com sucesso: {process.stdout}")
+    except subprocess.CalledProcessError as e:
+        logging.error(f"Subprocesso do pipeline falhou: {e.stderr}")
+
+# --- Lógica de Autenticação e Dependências da API ---
+def get_current_active_user(current_user: schemas.User = Depends(security.get_current_user)) -> schemas.User:
+    # No futuro, esta função pode verificar se o usuário está desabilitado no banco de dados.
+    # Por enquanto, a verificação está implícita no token.
+    return current_user
 
 # --- Endpoints da API ---
-@app.post("/api/v1/query", response_model=QueryResponse)
-async def handle_query(request: QueryRequest):
-    """
-    Endpoint principal que recebe a consulta do usuário, invoca o grafo
-    e retorna a resposta final.
-    """
-    logger.info(f"Recebida nova query para session_id='{request.session_id}': '{request.user_query}'")
+api_router = APIRouter(prefix="/api/v1")
+
+@api_router.post("/auth/token", response_model=schemas.Token, tags=["Authentication"])
+async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends()):
+    role, error_msg = auth_db.autenticar_usuario(form_data.username, form_data.password)
+    if not role:
+        logging.warning(f"Tentativa de login falha para o usuário {form_data.username}: {error_msg or 'Credenciais incorretas'}")
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail=error_msg or "Incorrect username or password",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+    
+    access_token_expires = timedelta(minutes=security.ACCESS_TOKEN_EXPIRE_MINUTES)
+    access_token = security.create_access_token(
+        data={"sub": form_data.username, "role": role},
+        expires_delta=access_token_expires
+    )
+    return {"access_token": access_token, "token_type": "bearer"}
+
+@api_router.post("/queries/", response_model=schemas.QueryResponse, tags=["Queries"])
+async def handle_query(
+    query: schemas.QueryRequest,
+    current_user: schemas.User = Depends(get_current_active_user)
+):
     try:
-        # O estado inicial é apenas a mensagem do usuário
-        initial_state = {
-            "messages": [{"role": "user", "content": request.user_query}]
-        }
-        
-        # Invoca o grafo com o estado inicial
-        final_state = agent_graph.invoke(initial_state)
-        
-        # A resposta final está na chave 'final_response' do estado
-        response_content = final_state.get("final_response", {
-            "type": "error",
-            "content": "Ocorreu um erro inesperado no processamento do agente."
-        })
-
-        return QueryResponse(response=response_content)
-
+        # A inicialização do QueryProcessor pode precisar de mais contexto
+        query_processor = QueryProcessor(user_id=current_user.username)
+        # O método a ser chamado pode variar
+        agent_response = await query_processor.process(query.text, query.session_id)
+        return schemas.QueryResponse(**agent_response)
     except Exception as e:
-        logger.error(f"Erro crítico ao invocar o grafo: {e}", exc_info=True)
-        raise HTTPException(status_code=500, detail="Erro interno no servidor do agente.")
+        logging.error(f"Erro ao processar a consulta para o usuário {current_user.username}: {e}")
+        raise HTTPException(status_code=500, detail="Erro interno ao processar a sua pergunta.")
 
-@app.get("/status")
-def status():
-    return {"status": "Agent_BI API is running"}
+@api_router.get("/users/me", response_model=schemas.User, tags=["Users"])
+async def read_users_me(current_user: schemas.User = Depends(get_current_active_user)):
+    return current_user
 
-# --- Execução da Aplicação ---
-if __name__ == "__main__":
-    uvicorn.run(app, host="0.0.0.0", port=8000)
-Ficheiro 5: streamlit_app.py"""
-Interface de Usuário (Frontend) para o Agent_BI, reescrita para ser um
-cliente puro da API FastAPI.
-"""
+# --- Endpoints de Monitoramento e Ações (Existentes) ---
+@app.get("/status", tags=["Monitoring"])
+def read_root():
+    return {"status": "Serviço de Backend do Agent_BI está no ar."}
+
+@app.post("/run-pipeline", tags=["Actions"])
+async def trigger_pipeline_endpoint():
+    logging.info("Execução manual do pipeline de dados acionada via API.")
+    scheduler.add_job(trigger_pipeline_subprocess, 'date', name="Execução Manual do Pipeline")
+    return {"message": "Execução do pipeline de dados iniciada."}
+
+# --- Inicialização ---
+app.include_router(api_router)
+
+@app.on_event("startup")
+async def startup_event():
+    logging.info("Iniciando o agendador de tarefas do backend...")
+    scheduler.add_job(
+        trigger_pipeline_subprocess,
+        trigger=CronTrigger(hour='8,20', minute='0'),
+        id="data_pipeline_job",
+        name="Pipeline de Extração de Dados SQL para Parquet",
+        replace_existing=True
+    )
+    scheduler.start()
+    logging.info("Agendador iniciado.")
+
+@app.on_event("shutdown")
+def shutdown_event():
+    logging.info("Encerrando o agendador de tarefas...")
+    scheduler.shutdown()
+Arquivo: streamlit_app.py (a versão atual)
+import plotly.graph_objects as go
 import streamlit as st
-import requests
-import uuid
+import pandas as pd
+from datetime import datetime
+import logging
+import streamlit.components.v1 as components
+import sys
+import plotly.io as pio
 
-# --- Configuração da Página ---
-st.set_page_config(
-    page_title="Agent_BI",
-    page_icon="📊",
-    layout="wide"
-)
-st.title("📊 Agent_BI - Assistente Inteligente")
+from core import auth
+from core.query_processor import QueryProcessor
+
+audit_logger = logging.getLogger("audit")
 
 # --- Constantes ---
-API_URL = "http://127.0.0.1:8000/api/v1/query"
+from core.session_state import SESSION_STATE_KEYS
+ROLES = {"ASSISTANT": "assistant", "USER": "user"}
+PAGE_CONFIG = {
+    "page_title": "Assistente de BI - Caçula",
+    "page_icon": "📊",
+    "layout": "wide",
+    "initial_sidebar_state": "expanded",
+}
 
-# --- Gerenciamento de Estado da Sessão ---
-if 'session_id' not in st.session_state:
-    st.session_state.session_id = str(uuid.uuid4())
-if 'messages' not in st.session_state:
-    st.session_state.messages = [{"role": "assistant", "content": "Olá! Como posso ajudar você com seus dados hoje?"}]
+# --- Configuração da Página e Estilos ---
+st.set_page_config(**PAGE_CONFIG)
 
-# --- Funções de Interação com a API ---
-def get_agent_response(user_query: str):
-    """Envia a query para a API FastAPI e retorna a resposta."""
-    try:
-        payload = {
-            "user_query": user_query,
-            "session_id": st.session_state.session_id
-        }
-        response = requests.post(API_URL, json=payload)
-        response.raise_for_status()  # Lança exceção para status de erro HTTP
-        return response.json().get("response", {})
-    except requests.exceptions.RequestException as e:
-        st.error(f"Erro de conexão com o backend: {e}")
-        return {"type": "error", "content": "Não foi possível conectar ao servidor do agente."}
+# Load CSS from external file for better organization
+with open("style.css") as f:
+    st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
 
-# --- Renderização da Interface ---
-# Exibe o histórico da conversa
-for msg in st.session_state.messages:
-    with st.chat_message(msg["role"]):
-        # O conteúdo agora é um dicionário com 'type' e 'content'
-        response_data = msg.get("content")
-        if isinstance(response_data, dict):
-            response_type = response_data.get("type")
-            content = response_data.get("content")
-            
-            if response_type == "chart":
-                st.plotly_chart(content, use_container_width=True)
-            elif response_type == "clarification":
-                st.markdown(content.get("message"))
-                # Renderiza botões para as opções de esclarecimento
-                # Esta parte precisaria de uma lógica de callback mais complexa
-                # para enviar a resposta do botão de volta para a API.
-                # Por simplicidade, apenas exibimos as opções.
-                for choice_type, choices in content.get("choices", {}).items():
-                    st.write(f"**{choice_type.replace('_', ' ').title()}:**")
-                    cols = st.columns(len(choices))
-                    for i, choice in enumerate(choices):
-                        if cols[i].button(choice):
-                            # Em uma implementação real, este clique enviaria uma nova query
-                            st.session_state.messages.append({"role": "user", "content": choice})
-                            # Aqui, apenas adicionamos ao chat e rerodamos
-                            st.rerun()
 
-            else: # type 'data', 'text', 'error'
-                st.write(content)
-        else: # Formato antigo ou texto simples
-            st.write(response_data)
+def initialize_session_state():
+    """Inicializa o estado da sessão se não existir."""
+    if SESSION_STATE_KEYS["QUERY_PROCESSOR"] not in st.session_state:
+        st.session_state[SESSION_STATE_KEYS["QUERY_PROCESSOR"]] = QueryProcessor()
+    if SESSION_STATE_KEYS["MESSAGES"] not in st.session_state:
+        st.session_state[SESSION_STATE_KEYS["MESSAGES"]] = [
+            {
+                "role": ROLES["ASSISTANT"],
+                "output": "Olá! Como posso ajudar você hoje?",
+            }
+        ]
+    if "dashboard_charts" not in st.session_state: # Adicionado para inicializar o dashboard_charts
+        st.session_state.dashboard_charts = []
 
-# Input do usuário
-if prompt := st.chat_input("Faça sua pergunta..."):
-    # Adiciona e exibe a mensagem do usuário
-    st.session_state.messages.append({"role": "user", "content": prompt})
-    with st.chat_message("user"):
-        st.markdown(prompt)
 
-    # Obtém e exibe a resposta do assistente
-    with st.chat_message("assistant"):
-        with st.spinner("Processando..."):
-            agent_response = get_agent_response(prompt)
-            
-            # Adiciona a resposta completa ao histórico para renderização
-            st.session_state.messages.append({"role": "assistant", "content": agent_response})
-            
-            # Renderiza a resposta imediatamente
-            response_type = agent_response.get("type")
-            content = agent_response.get("content")
+def handle_logout():
+    """Limpa o estado da sessão e força o rerun para a tela de login."""
+    username = st.session_state.get(SESSION_STATE_KEYS["USERNAME"], "N/A")
+    audit_logger.info(f"Usuário {username} deslogado.")
+    keys_to_clear = [
+        SESSION_STATE_KEYS["AUTHENTICATED"],
+        SESSION_STATE_KEYS["USERNAME"],
+        SESSION_STATE_KEYS["ROLE"],
+        SESSION_STATE_KEYS["LAST_LOGIN"],
+    ]
+    for key in keys_to_clear:
+        if key in st.session_state:
+            del st.session_state[key]
+    st.rerun()
 
-            if response_type == "chart":
-                st.plotly_chart(content, use_container_width=True)
-            elif response_type == "clarification":
-                st.markdown(content.get("message"))
-                # Simplificado: Apenas mostra as opções, sem funcionalidade de clique aqui
-                for choice_type, choices in content.get("choices", {}).items():
-                    st.write(f"**{choice_type.replace('_', ' ').title()}:**")
-                    for choice in choices:
-                        st.button(choice, disabled=True) # Desabilitado para evitar loop
-            else: # data, text, error
-                st.write(content)
-5. FORMATO DE SAÍDA DESEJADOGere a sua resposta em duas partes claras:Parte 1 - CÓDIGO CORRIGIDO:Uma sequência de cinco blocos de código Python, cada um identificado com o seu caminho de ficheiro completo, contendo os imports corrigidos.Parte 2 - CHECKLIST DE INTEGRAÇÃO:Um texto bem formatado em Markdown com o checklist detalhado.
+
+def show_bi_assistant():
+    """Exibe a interface principal do assistente de BI."""
+    st.markdown(
+        "<h1 class='main-header'>📊 Assistente de BI Caçulinha</h1>",
+        unsafe_allow_html=True,
+    )
+    
+    
+
+    # Exibir histórico de mensagens
+    for idx, message in enumerate(st.session_state[SESSION_STATE_KEYS["MESSAGES"]]):
+        with st.chat_message(message["role"]):
+            output = message.get("output")
+            if isinstance(output, pd.DataFrame):
+                st.dataframe(output, use_container_width=True)
+            elif isinstance(output, dict) and output.get("type") == "chart": # Para gráficos Plotly
+                st.plotly_chart(output.get("output"), use_container_width=True, key=f"history_chart_{idx}")
+            else: # Para texto, gráficos Plotly diretos ou outros tipos de dicionário inesperados
+                if isinstance(output, go.Figure): # Se for um objeto Plotly Figure
+                    st.plotly_chart(output, use_container_width=True, key=f"history_fig_{idx}")
+                elif isinstance(output, str):
+                    # Fallback: tentar decodificar JSON de Plotly se for uma string
+                    fig = None
+                    try:
+                        if output.strip().startswith("{"):
+                            fig = pio.from_json(output)
+                    except Exception:
+                        fig = None
+                    if fig is not None:
+                        st.plotly_chart(fig, use_container_width=True, key=f"history_json_fig_{idx}")
+                    else:
+                        st.markdown(str(output or ""))
+                else: # Para texto ou outros tipos de dicionário inesperados
+                    st.markdown(str(output or ""))
+
+    # Exemplos de perguntas na barra lateral
+    st.sidebar.markdown("### Exemplos de Perguntas:")
+    st.sidebar.info("Qual o preço do produto 719445?")
+    st.sidebar.info("Liste os produtos da categoria 'BRINQUEDOS'")
+    st.sidebar.info("Mostre um gráfico de vendas para o produto 610403")
+
+    # Entrada do usuário
+    if prompt := st.chat_input("Faça uma pergunta sobre seus dados..."):
+        # Input validation and sanitization
+        if not prompt.strip(): # Check for empty or whitespace-only input
+            st.warning("Por favor, digite uma pergunta válida.")
+            return # Stop processing if input is empty
+
+        if len(prompt) > 500: # Example: Limit input length to 500 characters
+            st.warning("Sua pergunta é muito longa. Por favor, seja mais conciso (máximo 500 caracteres).")
+            return # Stop processing if input is too long
+
+        # Adicionar mensagem do usuário ao histórico e exibir
+        st.session_state[SESSION_STATE_KEYS["MESSAGES"]].append(
+            {"role": ROLES["USER"], "output": prompt}
+        )
+        with st.chat_message(ROLES["USER"]):
+            st.markdown(prompt)
+
+        # Processar a pergunta e obter a resposta
+        with st.chat_message(ROLES["ASSISTANT"]):
+            st.info("Aguarde enquanto o assistente processa sua solicitação...") # Added info message
+            with st.spinner("O assistente de BI está pensando..."): # More generic spinner message
+                query_processor = st.session_state[
+                    SESSION_STATE_KEYS["QUERY_PROCESSOR"]
+                ]
+                response = query_processor.process_query(prompt)
+
+                # Normaliza a resposta para exibição e histórico
+                assistant_message = None
+                if response.get("type") == "dataframe":
+                    df = response.get("output")
+                    st.dataframe(df, use_container_width=True)
+                    assistant_message = {"role": ROLES["ASSISTANT"], "output": df}
+                elif response.get("type") == "chart":
+                    raw = response.get("output")
+                    fig = None
+                    try:
+                        if isinstance(raw, str):
+                            # Reconstrói a figura a partir de JSON serializado
+                            fig = pio.from_json(raw)
+                        elif isinstance(raw, dict) and raw.get("data") is not None:
+                            # Constrói figura a partir de dicionário
+                            fig = go.Figure(raw)
+                        elif isinstance(raw, go.Figure):
+                            fig = raw
+                    except Exception as e:
+                        st.error(f"Falha ao decodificar gráfico: {e}")
+
+                    if fig is not None:
+                        st.plotly_chart(fig, use_container_width=True, key=f"new_chart_{datetime.now().timestamp()}")
+
+                        # Adicionar ao dashboard_charts
+                        if "dashboard_charts" not in st.session_state:
+                            st.session_state.dashboard_charts = []
+
+                        st.session_state.dashboard_charts.append({
+                            "type": "chart", # Tipo é 'chart'
+                            "output": fig, # Objeto Plotly direto
+                            "title": f"Gráfico gerado em {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}", # Título genérico
+                            "query": prompt, # A consulta original
+                            "timestamp": datetime.now().timestamp()
+                        })
+                        st.success("Gráfico adicionado ao Dashboard!")
+
+                        assistant_message = {"role": ROLES["ASSISTANT"], "output": {"type": "chart", "output": fig}}
+                    else:
+                        st.warning("Não foi possível renderizar o gráfico retornado.")
+                        assistant_message = {"role": ROLES["ASSISTANT"], "output": str(response)}
+                else:
+                    text = response.get("output")
+                    st.markdown(text if text is not None else "")
+                    assistant_message = {"role": ROLES["ASSISTANT"], "output": text if text is not None else ""}
+
+                # Adiciona a mensagem do assistente ao histórico já normalizada
+                st.session_state[SESSION_STATE_KEYS["MESSAGES"]].append(assistant_message)
+
+    st.markdown(
+        f"<div class='footer'>Desenvolvido para Análise de Dados Caçula © {datetime.now().year}</div>",
+        unsafe_allow_html=True,
+    )
+
+
+def show_admin_dashboard():
+    """Exibe o painel de administração para usuários com perfil 'admin'."""
+    st.markdown(
+        "<h1 class='main-header'>⚙️ Painel de Administração</h1>",
+        unsafe_allow_html=True,
+    )
+    st.markdown(
+        "<p class='sub-header'>Gerencie usuários, configurações e monitore o sistema.</p>",
+        unsafe_allow_html=True,
+    )
+    st.subheader("Funcionalidades:")
+    st.write("- Gerenciamento de usuários")
+    st.write("- Visualização de logs")
+    st.write("- Configurações do sistema")
+    st.markdown(
+        f"<div class='footer'>Desenvolvido para Análise de Dados Caçula © {datetime.now().year}</div>",
+        unsafe_allow_html=True,
+    )
+
+
+import logging
+import uuid
+# import sentry_sdk
+import os
+from core.config.logging_config import setup_logging
+from core.utils.context import correlation_id_var
+
+logger = logging.getLogger(__name__)
+
+def main():
+    """Função principal que controla o fluxo da aplicação."""
+    setup_logging()
+    # sentry_dsn = os.getenv("SENTRY_DSN")
+    # if sentry_dsn:
+    #     sentry_sdk.init(
+    #         dsn=sentry_dsn,
+    #         traces_sample_rate=1.0,
+    #     )
+
+    # Set correlation id
+    if 'correlation_id' not in st.session_state:
+        st.session_state.correlation_id = str(uuid.uuid4())
+    correlation_id_var.set(st.session_state.correlation_id)
+
+    logger.info("Iniciando a aplicação Streamlit.")
+    initialize_session_state()
+
+    # --- Verificação de Autenticação e Sessão ---
+    if not st.session_state.get(SESSION_STATE_KEYS["AUTHENTICATED"]):
+        auth.login()
+        st.stop()
+
+    if auth.sessao_expirada():
+        st.warning(
+            "Sua sessão expirou por inatividade. Faça login novamente para continuar."
+        )
+        handle_logout()
+        # A tela de login será exibida no próximo rerun após o st.stop()
+        st.stop()
+
+
+    # --- Barra Lateral e Logout ---
+    username = st.session_state.get(SESSION_STATE_KEYS["USERNAME"])
+    role = st.session_state.get(SESSION_STATE_KEYS["ROLE"])
+
+    
+
+    if username:
+        st.sidebar.markdown(
+            f"<span style='color:#2563EB;'>Bem-vindo, <b>{username}</b>!</span>",
+            unsafe_allow_html=True,
+        )
+        st.sidebar.markdown("<hr>", unsafe_allow_html=True)
+        if st.sidebar.button("Sair"):
+            handle_logout()
+
+    # --- Renderização do Conteúdo Principal ---
+    show_bi_assistant()
+
+
+if __name__ == "__main__":
+    main()

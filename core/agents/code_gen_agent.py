@@ -17,6 +17,7 @@ import io
 import sys
 import plotly.io as pio
 import uuid
+from core.utils.json_utils import _clean_json_values # Import the cleaning function
 
 from core.llm_base import BaseLLMAdapter
 
@@ -30,7 +31,7 @@ class CodeGenAgent:
         """
         self.logger = logging.getLogger(__name__)
         self.llm = llm_adapter # Use o adaptador injetado
-        self.parquet_dir = os.path.join(os.getcwd(), "data", "parquet_cleaned")
+        self.parquet_dir = os.path.join(os.getcwd(), "data", "parquet")
         self.model = SentenceTransformer('all-MiniLM-L6-v2')
         self._load_vector_store()
         self.code_cache = {}
@@ -52,7 +53,7 @@ class CodeGenAgent:
 
     def _get_catalog_timestamp(self) -> float:
         """Retorna o timestamp da última modificação do arquivo de catálogo."""
-        catalog_path = os.path.join(os.getcwd(), "data", "catalog_focused.json")
+        catalog_path = os.path.join(os.getcwd(), "data", "catalog_cleaned.json")
         try:
             return os.path.getmtime(catalog_path)
         except FileNotFoundError:
@@ -76,173 +77,99 @@ class CodeGenAgent:
         system_message = {
             "role": "system",
             "content": """
-            Você é um assistente de BI especializado em gerar código Python para análise de dados.
-            Siga as instruções cruciais de análise de dados para gerar um script Python completo e executável.
-            Você deve usar o arquivo 'admatao.parquet' para todas as consultas de dados.
-            A coluna que representa o ID do produto neste arquivo é 'PRODUTO'.
+                        Você deve usar o arquivo 'admatao.parquet' para todas as consultas de dados.
+                        CRÍTICO: Use EXATAMENTE os nomes de colunas fornecidos, respeitando maiúsculas/minúsculas.
             """
         }
 
         # Constrói o contexto com as colunas relevantes
         context = "\n".join([f"- Tabela: {col['table_name']}, Coluna: {col['column_name']}, Descrição: {col['column_description']}" for col in relevant_columns])
 
+        # Adiciona lista de colunas mais importantes com nomes corretos
+        main_columns = """
+COLUNAS PRINCIPAIS DISPONÍVEIS (use exatamente como mostrado):
+- nomesegmento (texto - segmento do produto)
+- nome_categoria (texto - categoria do produto)
+- nomegrupo (texto - grupo do produto)
+- nome_produto (texto - nome do produto)
+- nome_fabricante (texto - fabricante)
+- mes_01, mes_02, mes_03, mes_04, mes_05, mes_06, mes_07, mes_08, mes_09, mes_10, mes_11, mes_12 (numérico - vendas mensais)
+- mes_parcial (numérico - vendas do mês parcial atual)
+- estoque_atual (numérico - estoque atual)
+- estoque_cd (numérico - estoque CD)
+- preco_38_percent (numérico - preço)
+- une_nome (texto - nome da unidade)
+- codigo (numérico - código do produto)
+
+IMPORTANTE PARA ANÁLISES TEMPORAIS:
+- Para gráficos de evolução/tendência: Use TODAS as colunas mes_01 até mes_12
+- Para "últimos X meses": Use mes_12, mes_11, mes_10, etc. (do mais recente para o mais antigo)
+- Para "primeiros X meses": Use mes_01, mes_02, mes_03, etc.
+- Para criar gráficos temporais: transforme os dados em formato longo (melt) com mês e valor
+        """
+
         user_message = {
             "role": "user",
             "content": f"""
             **Instruções Cruciais de Análise de Dados:**
-            1.  **Use o Contexto Fornecido:** Baseie-se exclusivamente no contexto de colunas fornecido abaixo para decidir quais arquivos Parquet carregar e quais colunas usar. Não invente colunas ou arquivos.
-            2.  **Caminho dos Arquivos:** Os arquivos Parquet estão localizados no diretório `{self.parquet_dir}`. Use esta variável para construir o caminho para os arquivos.
-            3.  **Aplique Filtros:** Se a pergunta do usuário contiver condições (ex: "no segmento tecidos", "para o produto X"), traduza-as em filtros do Pandas (`df[df['coluna'] == 'valor']`).
-            4.  **Use a biblioteca Pandas** para manipulação de dados.
-            **IMPORTANTE:** Sempre trate os tipos de dados das colunas antes de usá-las. Para colunas que podem conter números (como vendas mensais 'MES_XX'), converta-as para numérico, tratando erros e preenchendo NaNs. Para colunas de texto (como IDs ou categorias), converta para string e minúsculas para comparação.
-                **ATENÇÃO:** As colunas de vendas mensais no arquivo `admatao.parquet` estão em MAIÚSCULAS (ex: 'MES_01', 'MES_02', etc.). Certifique-se de usar a capitalização correta ao referenciá-las.
-                Exemplos de conversão de tipo:
-                - Para colunas numéricas (ex: 'MES_XX'): `df['MES_XX'] = pd.to_numeric(df['MES_XX'], errors='coerce').fillna(0)`
-                - Para colunas de texto (ex: 'PRODUTO', 'NomeCategoria'): `df['COLUNA_TEXTO'] = df['COLUNA_TEXTO'].astype(str).str.lower()`
-            5.  **Contexto de Colunas Relevantes:**
+            1.  **Use o Contexto Fornecido:** Baseie-se exclusivamente no contexto de colunas fornecido abaixo para decidir quais colunas usar. Não invente colunas.
+            2.  **Use a biblioteca Pandas** para manipulação de dados.
+            **IMPORTANTE:** Sempre trate os tipos de dados das colunas antes de usá-las. Para colunas que podem conter números (como vendas mensais), converta-as para numérico, tratando erros e preenchendo NaNs. Para colunas de texto, converta para string.
+                **ATENÇÃO CRÍTICA:** Use EXATAMENTE os nomes de colunas conforme estão no DataFrame. Principais colunas disponíveis:
+                - Segmento: 'nomesegmento' (minúsculas)
+                - Categoria: 'nome_categoria' (com underline)
+                - Grupo: 'nomegrupo' (minúsculas)
+                - Produto: 'nome_produto' (com underline)
+                - Vendas mensais: 'mes_01', 'mes_02', ..., 'mes_12' (minúsculas com underline)
+                - Estoque: 'estoque_atual', 'estoque_cd', 'estoque_lv'
+                - Fabricante: 'nome_fabricante' (com underline)
+                - Código: 'codigo' (sem acento)
+
+                **EXEMPLOS DE USO CORRETO:**
+                - Para colunas numéricas: `df['mes_01'] = pd.to_numeric(df['mes_01'], errors='coerce').fillna(0)`
+                - Para colunas de texto: `df['nomesegmento'] = df['nomesegmento'].astype(str)`
+
+                **PARA ANÁLISES TEMPORAIS:**
+                - Evolução de vendas: `vendas_cols = ['mes_01', 'mes_02', 'mes_03', 'mes_04', 'mes_05', 'mes_06', 'mes_07', 'mes_08', 'mes_09', 'mes_10', 'mes_11', 'mes_12']`
+                - Transformar para formato longo: `df_melted = pd.melt(df, id_vars=['codigo', 'nome_produto'], value_vars=vendas_cols, var_name='mes', value_name='vendas')`
+                - Gráfico temporal: `fig = px.line(df_melted, x='mes', y='vendas', title='Evolução de Vendas')`
+            3.  **Contexto de Colunas Relevantes:**
                 ```
                 {context}
                 ```
-            6.  **Carregue os DataFrames necessários** a partir dos arquivos Parquet. A variável `parquet_dir` já está disponível no ambiente de execução. Use-a para construir o caminho. Ex: `df = pd.read_parquet(os.path.join(parquet_dir, "NOME_DO_ARQUIVO.parquet"))`
-            7.  **Analise os dados** para responder à pergunta do usuário.
-            8.  **Armazene o resultado final** (seja um texto, um número, um DataFrame ou uma figura Plotly) em uma variável chamada `result`.
-            9.  **Ordenação para Gráficos:** Para gráficos de linha ou de barras onde a ordem do eixo X é importante (como tempo ou categorias sequenciais), **SEMPRE ORDENE** o DataFrame pela coluna do eixo X antes de criar o gráfico. Ex: `df_grafico = df_grafico.sort_values(by='coluna_do_eixo_x')`.
-            10. Se a pergunta exigir um gráfico, use a biblioteca Plotly Express.
-            11. **O seu código deve ser um script Python completo e executável.** Não inclua explicações ou texto adicional fora do código.
-            12. **Verifique a Disponibilidade dos Dados:** Se o contexto não fornecer colunas para responder à pergunta, armazene na variável `result` uma mensagem informativa como: 'Não consigo responder a essa pergunta com os dados disponíveis.'
-            13. **NÃO chame .show() ou print()** no seu código. Apenas armazene o objeto final (DataFrame, figura Plotly, ou texto) na variável `result`.
-            14. **Tratamento de Dados Vazios:** Se, após a filtragem ou processamento, o DataFrame resultante estiver vazio ou não contiver dados suficientes para a análise/gráfico solicitado, armazene na variável `result` uma mensagem clara e amigável informando o usuário que não há dados disponíveis para a consulta específica (ex: 'Não foram encontrados dados de vendas para o produto X no período Y.').
 
-            **Pergunta do Usuário:** "{query}"
+            {main_columns}
+            4.  **A variável `df_raw_data` já contém um Pandas DataFrame com os dados brutos.** Use-a como sua fonte de dados principal. Você NÃO precisa carregar arquivos Parquet novamente.
+            5.  **Analise os dados** para responder à pergunta do usuário.
+            6.  **Armazene o resultado final** em uma variável chamada `result`.
+            7.  **Para Geração de Gráficos:**
+                *   Se a pergunta exigir um gráfico, use a biblioteca `plotly.express`.
+                *   A variável `result` **DEVE** conter um objeto `plotly.graph_objects.Figure`.
+                *   **Selecione as colunas apropriadas** de `df_raw_data` para os eixos X e Y, baseando-se na pergunta do usuário e nos tipos de dados das colunas.
+                *   **Escolha o tipo de gráfico mais adequado** (ex: `px.bar` para categorias, `px.line` para séries temporais, `px.scatter` para correlações).
+                *   **PARA GRÁFICOS TEMPORAIS/EVOLUÇÃO:**
+                    - Se o usuário pedir "evolução", "tendência", "ao longo do tempo", "mensais", "últimos meses":
+                    - Use pd.melt() para transformar mes_01-mes_12 em formato longo
+                    - Exemplo: `df_melted = pd.melt(df_filtered, id_vars=['codigo', 'nome_produto'], value_vars=['mes_01', 'mes_02', 'mes_03', 'mes_04', 'mes_05', 'mes_06', 'mes_07', 'mes_08', 'mes_09', 'mes_10', 'mes_11', 'mes_12'], var_name='mes', value_name='vendas')`
+                    - Use px.line() para mostrar tendência temporal
+                    - Para "últimos X meses": filtre apenas as colunas relevantes antes do melt
+                *   **SEMPRE ORDENE** o DataFrame pela coluna do eixo X antes de criar o gráfico, se a ordem for importante (como tempo ou categorias sequenciais). Ex: `df_grafico = df_grafico.sort_values(by='coluna_do_eixo_x')`.
+                *   Adicione um título significativo ao gráfico.
+            8.  **O seu código deve ser um script Python completo e executável.** Não inclua explicações ou texto adicional fora do código.
+            9.  **Verifique a Disponibilidade dos Dados:** Se o `df_raw_data` estiver vazio ou não contiver dados suficientes para a análise/gráfico solicitado, armazene na variável `result` uma mensagem clara e amigável informando o usuário que não há dados disponíveis para a consulta específica (ex: 'Não foram encontrados dados para a sua consulta.').
+            10. **NÃO chame .show() ou print()** no seu código. Apenas armazene o objeto final (DataFrame, figura Plotly, ou texto) na variável `result`.
 
-            **Exemplo de Uso:**
-
-            **Pergunta do Usuário:** "Qual o total de vendas por categoria nos últimos 3 meses?"
-
-            **Script Python Ideal:**
+            **Exemplo de Script Python para Gráfico de Barras:**
             ```python
             import pandas as pd
             import plotly.express as px
-            import os
-            from datetime import datetime, timedelta
 
-            # Carregar dados de vendas e produtos
-            df_vendas = pd.read_parquet(os.path.join(parquet_dir, "vendas.parquet"))
-            df_produtos = pd.read_parquet(os.path.join(parquet_dir, "produtos.parquet"))
+            # df_raw_data já está disponível e contém os dados
+            # Exemplo de processamento (se necessário)
+            # df_processado = df_raw_data.groupby('CATEGORIA')['VENDAS'].sum().reset_index()
 
-            # Converter coluna de data para datetime
-            df_vendas['data_venda'] = pd.to_datetime(df_vendas['data_venda'])
-
-            # Calcular a data de 3 meses atrás
-            data_limite = datetime.now() - timedelta(days=90)
-
-            # Filtrar vendas dos últimos 3 meses
-            df_vendas_recentes = df_vendas[df_vendas['data_venda'] >= data_limite]
-
-            # Unir com dados de produtos para obter a categoria
-            df_merged = pd.merge(df_vendas_recentes, df_produtos[['produto_id', 'categoria']], on='produto_id', how='left')
-
-            # Calcular total de vendas por categoria
-            vendas_por_categoria = df_merged.groupby('categoria')['valor_venda'].sum().reset_index()
-            vendas_por_categoria.columns = ['Categoria', 'Total de Vendas']
-
-            # Armazenar o resultado
-            result = vendas_por_categoria
-            ```
-
-            **Pergunta do Usuário:** "Mostre as vendas mensais do produto X em um gráfico de linha."
-
-            **Script Python Ideal:**
-            ```python
-            import pandas as pd
-            import plotly.express as px
-            import os
-
-            # Carregar dados do produto
-            df_produto = pd.read_parquet(os.path.join(parquet_dir, "admatao.parquet"))
-
-            # Filtrar pelo produto específico (substitua 'X' pelo ID do produto real)
-            produto_id = "369947" # Exemplo, o LLM deve extrair isso da pergunta
-            df_produto_filtrado = df_produto[df_produto['PRODUTO'] == produto_id]
-
-            # Colunas de vendas mensais (ex: 'MES_01', 'MES_02', etc.)
-            colunas_meses = [f'MES_{{i:02d}}' for i in range(1, 13)]
-            colunas_vendas_presentes = [col for col in colunas_meses if col in df_produto_filtrado.columns]
-
-            # Se não houver colunas de vendas, retorne uma mensagem
-            if not colunas_vendas_presentes:
-                result = f"Não foram encontradas colunas de vendas mensais para o produto {{produto_id}}."
-            else:
-                # Transformar dados de formato largo para longo (unpivot)
-                df_long = df_produto_filtrado.melt(
-                    id_vars=['PRODUTO'],
-                    value_vars=colunas_vendas_presentes,
-                    var_name='Mês',
-                    value_name='Vendas'
-                )
-
-                # Converter a coluna de vendas para numérico, tratando erros
-                df_long['Vendas'] = pd.to_numeric(df_long['Vendas'], errors='coerce').fillna(0)
-
-                # Agrupar por Mês e somar as Vendas para evitar a distorção
-                df_vendas_mensais = df_long.groupby('Mês')['Vendas'].sum().reset_index()
-
-                # Ordenar os dados pelo mês para garantir a ordem cronológica
-                df_vendas_mensais = df_vendas_mensais.sort_values(by='Mês')
-
-                # Criar o gráfico de barras, conforme a imagem
-                fig = px.bar(
-                    df_vendas_mensais,
-                    x='Mês',
-                    y='Vendas',
-                    title=f'Vendas Mensais do Produto {{produto_id}}',
-                    labels={{'Mês': 'Mês', 'Vendas': 'Vendas'}}
-                )
-                
-                # Armazenar o resultado
-                result = fig
-            ```
-
-            **Pergunta do Usuário:** "Mostre um gráfico de dispersão das vendas vs. lucro."
-
-            **Script Python Ideal:**
-            ```python
-            import pandas as pd
-            import plotly.express as px
-            import os
-
-            # Carregar dados (assumindo que 'admatao.parquet' contém vendas e lucro)
-            df_dados = pd.read_parquet(os.path.join(parquet_dir, "admatao.parquet"))
-
-            # Certificar-se de que as colunas são numéricas
-            df_dados['VENDAS'] = pd.to_numeric(df_dados['VENDAS'], errors='coerce').fillna(0)
-            df_dados['LUCRO'] = pd.to_numeric(df_dados['LUCRO'], errors='coerce').fillna(0)
-
-            # Criar o gráfico de dispersão
-            fig = px.scatter(df_dados, x='VENDAS', y='LUCRO', title='Vendas vs. Lucro')
-
-            # Armazenar o resultado
-            result = fig
-            ```
-
-            **Pergunta do Usuário:** "Mostre um histograma da distribuição de preços."
-
-            **Script Python Ideal:**
-            ```python
-            import pandas as pd
-            import plotly.express as px
-            import os
-
-            # Carregar dados (assumindo que 'admatao.parquet' contém a coluna de preço)
-            df_dados = pd.read_parquet(os.path.join(parquet_dir, "admatao.parquet"))
-
-            # Certificar-se de que a coluna de preço é numérica
-            df_dados['PREÇO'] = pd.to_numeric(df_dados['PREÇO'], errors='coerce').fillna(0)
-
-            # Criar o histograma
-            fig = px.histogram(df_dados, x='PREÇO', title='Distribuição de Preços')
-
-            # Armazenar o resultado
+            # Crie seu gráfico Plotly Express aqui
+            fig = px.bar(df_raw_data, x="NomeCategoria", y="MES_01", title="Vendas por Categoria no Mês 01")
             result = fig
             ```
 
@@ -250,14 +177,44 @@ class CodeGenAgent:
             ```python
             import pandas as pd
             import plotly.express as px
-            import os
 
+            # df_raw_data já está disponível aqui como um Pandas DataFrame
             # Escreva seu código aqui
-            result = None # Inicialize a variável de resultado
+            result = None # Armazene o resultado final aqui (DataFrame, figura Plotly, ou texto)
             ```
             """
         }
         return [system_message, user_message]
+
+    def _fix_column_names(self, code: str, df_columns: list) -> str:
+        """Corrige automaticamente nomes de colunas incorretos no código gerado."""
+        # Mapeamento de nomes incorretos comuns para corretos
+        column_fixes = {
+            'NOMESEGMENTO': 'nomesegmento',
+            'NOME_CATEGORIA': 'nome_categoria',
+            'NOMEGRUPO': 'nomegrupo',
+            'NOME_PRODUTO': 'nome_produto',
+            'NOME_FABRICANTE': 'nome_fabricante',
+            'ESTOQUE_UNE': 'estoque_atual',
+            'ESTOQUE_CD': 'estoque_cd',
+            'NOME': 'nome_produto',
+            'UNE_NOME': 'une_nome',
+            'PRODUTO': 'nome_produto',
+            'FABRICANTE': 'nome_fabricante'
+        }
+
+        # Adiciona correções para colunas de mês
+        for i in range(1, 13):
+            column_fixes[f'MES_{i:02d}'] = f'mes_{i:02d}'
+
+        # Aplica as correções
+        fixed_code = code
+        for wrong_name, correct_name in column_fixes.items():
+            if correct_name in df_columns:  # Só corrige se a coluna existe
+                fixed_code = fixed_code.replace(f"'{wrong_name}'", f"'{correct_name}'")
+                fixed_code = fixed_code.replace(f'"{wrong_name}"', f'"{correct_name}"')
+
+        return fixed_code
 
     def _execute_generated_code(self, code: str, local_scope: Dict[str, Any]):
         q = Queue()
@@ -293,14 +250,19 @@ class CodeGenAgent:
                 raise result
             return result
 
-    def generate_and_execute_code(self, query: str) -> dict:
+    def generate_and_execute_code(self, input_data: Dict[str, Any]) -> dict:
         """
         Gera, executa e retorna o resultado do código Python para uma dada consulta.
         """
-        self.logger.info(f'Iniciando geração e execução de código para a consulta: "{query}"')
+        query = input_data.get("query", "")
+        raw_data = input_data.get("raw_data", [])
         
         current_catalog_timestamp = self._get_catalog_timestamp()
-        cache_key = (query, current_catalog_timestamp)
+        # Use a hash of the query and a hash of the raw_data (converted to a string) for the cache key
+        # This ensures the cache key is hashable and reflects changes in raw_data
+        raw_data_cleaned = _clean_json_values(raw_data)
+        raw_data_hash = hash(json.dumps(raw_data_cleaned, sort_keys=True)) if raw_data_cleaned else 0
+        cache_key = (query, current_catalog_timestamp, raw_data_hash)
 
         # Tenta buscar o código no cache
         if cache_key in self.code_cache:
@@ -330,8 +292,15 @@ class CodeGenAgent:
             # Armazena o código gerado no cache
             self.code_cache[cache_key] = code_to_execute
 
+        # Criar o DataFrame para verificar as colunas
+        df_raw_data = pd.DataFrame(raw_data) if raw_data else pd.DataFrame()
+
+        # Corrigir nomes de colunas incorretos automaticamente
+        if not df_raw_data.empty:
+            code_to_execute = self._fix_column_names(code_to_execute, df_raw_data.columns.tolist())
+
         self.logger.info(f"""
-Código gerado pelo LLM (ou recuperado do cache):
+Código gerado pelo LLM (após correções):
 {code_to_execute}
 """ )
 
@@ -341,7 +310,8 @@ Código gerado pelo LLM (ou recuperado do cache):
                 "pd": pd,
                 "px": px,
                 "os": os,
-                "result": None
+                "result": None,
+                "df_raw_data": df_raw_data
             }
             
             # Definir o tema padrão do Plotly para garantir consistência visual

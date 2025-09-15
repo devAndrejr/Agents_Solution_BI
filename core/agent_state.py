@@ -22,4 +22,9 @@ class AgentState(TypedDict):
     retrieved_data: Optional[List[Dict[str, Any]]]
     chart_code: Optional[str]
     plotly_fig: Optional[PlotlyFigure]
+    plotly_spec: Optional[Dict[str, Any]]
     route_decision: Optional["RouteDecision"]  # Usar string para anotação de tipo
+    sql_query: Optional[str]
+    parquet_filters: Optional[Dict[str, Any]]
+    final_response: Optional[Dict[str, Any]] # Adicionar esta linha # Adicionar esta linha
+    intent: Optional[str]

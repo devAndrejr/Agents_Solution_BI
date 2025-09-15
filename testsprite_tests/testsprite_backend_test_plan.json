@@ -1,52 +1,52 @@
 [
   {
     "id": "TC001",
-    "title": "test_secure_user_authentication_and_role_based_access",
-    "description": "Verify that the user authentication system securely logs in users and enforces role-based access control to restrict access to features based on user roles."
+    "title": "test user authentication and role based access control",
+    "description": "Verify that the user authentication system correctly authenticates users and enforces role-based access control to prevent unauthorized data access."
   },
   {
     "id": "TC002",
-    "title": "test_natural_language_query_processing_accuracy",
-    "description": "Test the conversational interface's ability to accurately interpret and respond to complex Portuguese natural language queries with a minimum accuracy of 95%."
+    "title": "test natural language query processing in portuguese",
+    "description": "Test the system's ability to accurately process and respond to natural language queries in Portuguese, ensuring at least 95% accuracy in responses."
   },
   {
     "id": "TC003",
-    "title": "test_agent_response_including_text_numbers_and_visualizations",
-    "description": "Validate that the agent returns responses containing text, numerical data, and dynamic visualizations such as charts and tables as requested by the user."
+    "title": "test real time data querying from sql server",
+    "description": "Validate that the API correctly queries real-time business data from the SQL Server and returns accurate results."
   },
   {
     "id": "TC004",
-    "title": "test_dashboard_load_time_and_interactivity",
-    "description": "Ensure that the main dashboard loads key business KPIs within 5 seconds and supports interactive filtering, sorting, and exploration of data visualizations."
+    "title": "test dynamic data visualization generation",
+    "description": "Ensure that the API generates dynamic visualizations such as charts and tables correctly based on user queries and supports interactive features like filtering and sorting."
   },
   {
     "id": "TC005",
-    "title": "test_administrator_monitoring_and_metadata_management",
-    "description": "Verify that administrators can monitor data pipeline health, track data integration status, and manage business metadata through the provided interfaces."
+    "title": "test secure session management",
+    "description": "Check that user sessions are securely managed, including session creation, expiration, and protection against unauthorized access."
   },
   {
     "id": "TC006",
-    "title": "test_user_conversation_history_accessibility",
-    "description": "Check that users can access and review their past conversation history within the chat interface."
+    "title": "test administrator monitoring and management interfaces",
+    "description": "Verify that administrator APIs provide access to monitoring dashboards, pipeline health status, and user and role management functionalities."
   },
   {
     "id": "TC007",
-    "title": "test_secure_data_encryption_in_transit_and_at_rest",
-    "description": "Validate that all sensitive business data is encrypted both during transmission and when stored, complying with security requirements."
+    "title": "test logging and error tracking system",
+    "description": "Ensure that the logging API captures all critical events and errors accurately and provides comprehensive audit trails."
   },
   {
     "id": "TC008",
-    "title": "test_system_logging_and_error_monitoring",
-    "description": "Ensure that the system captures all critical events and errors through structured logging for audit and troubleshooting purposes."
+    "title": "test backend api query processing",
+    "description": "Validate that the backend API correctly processes user queries, integrates with LangGraph and OpenAI models, and returns appropriate responses."
   },
   {
     "id": "TC009",
-    "title": "test_system_performance_under_increased_load",
-    "description": "Test that the system maintains performance and reliability when handling a 50% increase in user load and 100% increase in data volume without degradation."
+    "title": "test data pipeline status and update api",
+    "description": "Test the API responsible for monitoring and updating the data pipeline status, ensuring data is correctly extracted, transformed, and loaded."
   },
   {
     "id": "TC010",
-    "title": "test_integration_with_sql_server_and_openai_models",
-    "description": "Verify the integration with SQL Server for data querying and OpenAI language models for natural language processing to ensure seamless data retrieval and response generation."
+    "title": "test system performance and scalability under load",
+    "description": "Assess the API's ability to maintain performance and availability under increased user load and data volume, meeting the specified uptime and response time criteria."
   }
 ]

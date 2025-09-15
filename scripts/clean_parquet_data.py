@@ -1,105 +1,102 @@
+
+# scripts/clean_parquet_data.py
 import pandas as pd
-import glob
+import re
+import logging
 import os
 import unicodedata
 
-def normalize_column_name(col_name):
+# Configuração de logging
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+logger = logging.getLogger(__name__)
+
+def clean_column_name(col_name: str, existing_names: set) -> str:
     """
-    Normaliza os nomes das colunas:
-    - Remove acentos e caracteres especiais.
-    - Substitui espaços e pontos por underscores.
-    - Converte para maiúsculas.
+    Limpa o nome da coluna: remove acentos, caracteres especiais, espaços e converte para snake_case.
+    Garante que o nome seja único adicionando um sufixo se necessário.
     """
-    # Remove acentos
-    nfkd_form = unicodedata.normalize('NFKD', str(col_name))
-    only_ascii = nfkd_form.encode('ASCII', 'ignore').decode('utf-8')
-    # Substitui caracteres problemáticos e espaços
-    no_special_chars = only_ascii.replace(' ', '_').replace('.', '').replace('%', 'PERCENT')
-    return no_special_chars.upper()
+    # Remover acentos
+    col_name = str(unicodedata.normalize('NFKD', col_name).encode('ascii', 'ignore').decode('utf-8'))
+    # Substituir caracteres especiais e espaços por underscore
+    col_name = re.sub(r'[^a-zA-Z0-9_]', '', col_name) # Remove tudo que não é alfanumérico ou underscore
+    col_name = re.sub(r'\s+', '_', col_name) # Substitui espaços por underscore
+    col_name = re.sub(r'[^a-zA-Z0-9_]', '', col_name) # Remove caracteres especiais restantes
+    # Converter para snake_case (se houver maiúsculas)
+    col_name = re.sub(r'([a-z0-9])([A-Z])', r'\1_\2', col_name).lower()
+    # Remover underscores duplicados ou no início/fim
+    col_name = re.sub(r'_+', '_', col_name).strip('_')
 
-def clean_parquet_file(file_path, output_dir):
+    # Garantir unicidade
+    original_col_name = col_name
+    counter = 1
+    while col_name in existing_names:
+        col_name = f"{original_col_name}_{counter}"
+        counter += 1
+    return col_name
+
+def clean_and_convert_datatypes(df: pd.DataFrame) -> pd.DataFrame:
     """
-    Lê um arquivo Parquet, limpa os dados e salva em um novo local.
+    Converte colunas para os tipos de dados corretos, tratando erros.
     """
-    base_name = os.path.basename(file_path)
-    print(f"--- Processando arquivo: {base_name} ---")
-
-    try:
-        df = pd.read_parquet(file_path)
-
-        # 1. Normalizar nomes das colunas e garantir unicidade
-        print("  - Normalizando nomes das colunas...")
-        original_columns = df.columns
-        new_columns = [normalize_column_name(col) for col in original_columns]
-        
-        # Lógica para garantir nomes únicos
-        final_columns = []
-        counts = {}
-        for col in new_columns:
-            if col in counts:
-                counts[col] += 1
-                final_columns.append(f"{col}_{counts[col]}")
-            else:
-                counts[col] = 0
-                final_columns.append(col)
-        
-        df.columns = final_columns
-
-        # 2. Corrigir tipos de dados específicos
-        # Para ADMAT_SEMVENDAS.parquet, corrigir a coluna de data
-        if "ADMAT_SEMVENDAS" in base_name and 'DATACRIALINHAVERDE' in df.columns:
-            print("  - Corrigindo tipo da coluna 'DATACRIALINHAVERDE'...")
-            df['DATACRIALINHAVERDE'] = pd.to_datetime(df['DATACRIALINHAVERDE'], errors='coerce')
-
-        # 3. Otimizar memória (convertendo object para category onde fizer sentido)
-        print("  - Otimizando tipos de dados (object -> category)...")
-        object_cols = df.select_dtypes(include=['object']).columns
-        print(f"    - Encontradas {len(object_cols)} colunas do tipo 'object' para otimizar.")
-        for col in object_cols:
+    logger.info("Iniciando conversão de tipos de dados...")
+    for col in df.columns:
+        # Tentar converter para numérico
+        if pd.api.types.is_object_dtype(df[col]): # Corrected line
             try:
-                # Heurística: se a cardinalidade for menor que 50%
-                if df[col].nunique() / len(df) < 0.5:
-                    df[col] = df[col].astype('category')
-            except Exception as inner_e:
-                print(f"      - AVISO: Nao foi possivel otimizar a coluna '{col}'. Erro: {inner_e}")
-                continue
+                # Tenta converter para numérico, coercing errors para NaN
+                df[col] = pd.to_numeric(df[col], errors='coerce')
+                logger.info(f"Coluna '{col}' convertida para numérico.")
+            except Exception:
+                pass # Não é numérico, tentar outras conversões
+        
+        # Tentar converter para datetime
+        if pd.api.types.is_object_dtype(df[col]): # Corrected line
+            try:
+                # Tenta converter para datetime, coercing errors para NaT
+                df[col] = pd.to_datetime(df[col], errors='coerce')
+                logger.info(f"Coluna '{col}' convertida para datetime.")
+            except Exception:
+                pass # Não é datetime, manter como object
 
-        # 4. Salvar o arquivo limpo
-        output_path = os.path.join(output_dir, base_name)
-        print(f"  - Salvando arquivo limpo em: {output_path}")
-        df.to_parquet(output_path, index=False)
-
-        print(f"  - Processamento concluído com sucesso.")
-
-    except Exception as e:
-        print(f"\n[!] Erro ao processar o arquivo {base_name}: {e}")
-
-    print("\n" + "="*50 + "\n")
+    return df
 
 def main():
-    """
-    Função principal para limpar todos os arquivos Parquet.
-    """
-    input_dir = "data/parquet/"
-    output_dir = "data/parquet_cleaned/"
+    file_path = r"C:\Users\André\Documents\Agent_BI\data\parquet_cleaned\admatao.parquet"
+    logger.info(f"Carregando arquivo Parquet de: {file_path}")
+    
+    try:
+        df = pd.read_parquet(file_path)
+        logger.info(f"Arquivo carregado. Shape original: {df.shape}")
 
-    # Criar o diretório de saída se não existir
-    if not os.path.exists(output_dir):
-        print(f"Criando diretório de saída: {output_dir}")
-        os.makedirs(output_dir)
+        # 1. Limpar nomes das colunas
+        original_columns = df.columns.tolist()
+        cleaned_columns = []
+        seen_names = set()
+        for col in df.columns:
+            cleaned_name = clean_column_name(col, seen_names)
+            cleaned_columns.append(cleaned_name)
+            seen_names.add(cleaned_name)
+        df.columns = cleaned_columns
+        logger.info("Nomes das colunas limpos.")
+        for old, new in zip(original_columns, df.columns):
+            if old != new:
+                logger.info(f"  Renomeado: '{old}' -> '{new}'")
 
-    parquet_files = glob.glob(os.path.join(input_dir, "*.parquet"))
+        # 2. Converter tipos de dados
+        df = clean_and_convert_datatypes(df)
+        logger.info("Tipos de dados convertidos.")
 
-    if not parquet_files:
-        print(f"Nenhum arquivo Parquet encontrado em '{input_dir}'.")
-        return
+        # 3. Salvar o arquivo limpo
+        df.to_parquet(file_path, index=False)
+        logger.info(f"Arquivo Parquet limpo salvo em: {file_path}")
+        logger.info("Análise de tipos de dados após limpeza:")
+        for col, dtype in df.dtypes.items():
+            logger.info(f"  - {col}: {dtype}")
 
-    print(f"Encontrados {len(parquet_files)} arquivos Parquet. Iniciando limpeza...")
-
-    for file in parquet_files:
-        clean_parquet_file(file, output_dir)
-
-    print("Limpeza de todos os arquivos concluída.")
+    except FileNotFoundError:
+        logger.error(f"Erro: Arquivo Parquet não encontrado em {file_path}")
+    except Exception as e:
+        logger.error(f"Erro durante o processo de limpeza: {e}", exc_info=True)
 
 if __name__ == "__main__":
     main()

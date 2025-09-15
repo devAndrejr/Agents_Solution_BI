@@ -1,141 +1,162 @@
 {
   "meta": {
     "project": "Agent_BI",
-    "date": "2025-09-10",
-    "prepared_by": "Gemini"
+    "date": "2025-09-13",
+    "prepared_by": "ChatGPT"
   },
-  "product_overview": "Agent_BI is a conversational Business Intelligence platform designed to democratize data access for business users, providing quick, intuitive insights through natural language queries and dynamic data visualizations.",
+  "product_overview": "Agent_BI is a conversational Business Intelligence platform that empowers business users to access data insights through natural language queries in Portuguese, featuring dynamic visualizations and robust data integration for informed decision-making.",
   "core_goals": [
-    "Enable business users to query and visualize data in natural language with high accuracy.",
-    "Reduce reliance on technical teams for generating business reports and dashboards.",
-    "Provide interactive, real-time dashboards with key business KPIs.",
-    "Ensure robust security and access control for sensitive business data.",
-    "Maintain high performance and reliability with sub-5 second dashboard loads and 99.9% uptime."
+    "Enable business users to query and visualize data in natural language with high accuracy, specifically supporting Portuguese language.",
+    "Reduce reliance on technical teams by providing self-service analytics and conversational interfaces.",
+    "Provide interactive and real-time dashboards displaying key business KPIs with dynamic visualizations.",
+    "Ensure secure access with strong authentication and role-based access control for sensitive business data.",
+    "Maintain high system performance, availability, and scalability to handle growing user load and data volume."
   ],
   "key_features": [
-    "Conversational interface using natural language processing to interpret complex Portuguese queries.",
-    "Agent generates responses including text, numbers, and dynamic visualizations like charts and tables.",
-    "Conversation history accessible for users to review past interactions.",
-    "Main dashboard displaying key performance indicators (KPIs) relevant to business units.",
-    "Dynamic generation of interactive charts with filtering, sorting, and exploration capabilities.",
-    "Monitoring interface for administrators to track pipeline health and data integration status.",
-    "Data catalog management for administrators to edit and enrich business metadata.",
-    "User authentication with secure login and role-based access control (RBAC).",
-    "Admin panel for managing users, roles, and system configurations.",
-    "Integration with SQL Server for business data querying and with OpenAI for language model processing.",
-    "Structured logging and error monitoring to ensure system reliability."
+    "Conversational interface built with Streamlit that supports natural language queries and displays text responses, figures, and charts.",
+    "Integration with SQL Server for real-time business data querying and ETL pipelines for data management.",
+    "Agent orchestration using LangGraph and LangChain to process and interpret complex queries.",
+    "Interactive data visualizations generated with Plotly including filtering, sorting, and exploration features.",
+    "User authentication and secure session management with role-based access control (RBAC).",
+    "Administrator interfaces for monitoring pipeline health, managing metadata, users, and roles.",
+    "Backend API implemented with FastAPI and Flask for query processing and task scheduling.",
+    "Integration with OpenAI language models to understand and respond to natural language queries.",
+    "Structured logging and monitoring system for error tracking and audit trails.",
+    "Comprehensive unit and integration testing to ensure system reliability and accuracy."
   ],
   "user_flow_summary": [
-    "User logs in via the secure authentication system with role-based access determining accessible features.",
-    "User enters natural language query in the chat interface; the system processes it via the LangGraph orchestration and OpenAI language models.",
-    "Agent returns accurate answers with supportive visualizations if requested.",
-    "User interacts with dashboards and visualizations, applying filters and exploring data dynamically.",
-    "Administrators monitor data pipelines and manage metadata and user roles through dedicated interfaces.",
-    "System logs all interactions and monitors performance and errors for maintenance and improvements."
+    "User logs in through a secure authentication system that applies RBAC to control access.",
+    "User submits a query in natural language Portuguese via the Streamlit chat interface.",
+    "The query is processed by the LangGraph orchestration agent and OpenAI models to generate an accurate response.",
+    "The system returns answers including textual information and dynamic visualizations such as charts and tables.",
+    "Users interact with dashboards and visualizations, applying filters and exploring data interactively.",
+    "Administrators access monitoring dashboards to track data pipeline status and manage metadata and user roles.",
+    "All user interactions and system activities are logged for auditing, performance monitoring, and troubleshooting."
   ],
   "validation_criteria": [
-    "Accuracy of natural language query responses exceeds 95%.",
-    "Dashboard and visualization load times do not exceed 5 seconds under normal load.",
-    "System uptime maintained at or above 99.9%.",
-    "Role-based access control prevents unauthorized data access.",
-    "All sensitive data encrypted in transit and at rest complying with security requirements.",
-    "Logging captures all critical events and errors for audit and troubleshooting.",
-    "System performance scales to handle 50% increased user load and 100% increased data volume without degradation."
+    "Natural language query response accuracy is at least 95%.",
+    "Dashboard and visualization load times remain under 5 seconds during normal use.",
+    "System uptime meets or exceeds 99.9%.",
+    "Role-based access control prevents unauthorized data access effectively.",
+    "All sensitive data is encrypted both in transit and at rest following security policies.",
+    "Logging captures all critical events and errors accurately and comprehensively.",
+    "System performance scales appropriately to handle a 50% increase in users and 100% increase in data volume without degradation."
   ],
   "code_summary": {
     "tech_stack": [
       "Python",
-      "Streamlit",
-      "Flask",
       "FastAPI",
+      "Streamlit",
+      "Langchain",
       "SQL Server",
-      "LangGraph",
-      "LangChain",
-      "OpenAI",
-      "Pandas",
-      "Plotly"
+      "uvicorn",
+      "pandas",
+      "faiss"
     ],
     "features": [
       {
-        "name": "Interface de Usuário Streamlit",
-        "description": "Interface principal do assistente de BI construída com Streamlit, incluindo chat, visualizações e diagnóstico",
+        "name": "handle_query",
+        "description": "Endpoint principal que recebe a consulta do utilizador, invoca o grafo e retorna a resposta final.",
         "files": [
-          "streamlit_app.py",
-          "streamlit_teste_novo.py",
-          "style.css"
-        ]
+          "main.py"
+        ],
+        "api_doc": {
+          "openapi": "3.0.0",
+          "info": {
+            "title": "Agent_BI - API Gateway",
+            "version": "3.0.0"
+          },
+          "paths": {
+            "/api/v1/query": {
+              "post": {
+                "summary": "Handle Query",
+                "requestBody": {
+                  "required": true,
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/QueryRequest"
+                      }
+                    }
+                  }
+                },
+                "responses": {
+                  "200": {
+                    "description": "Successful Response",
+                    "content": {
+                      "application/json": {
+                        "schema": {
+                          "type": "object"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "components": {
+            "schemas": {
+              "QueryRequest": {
+                "title": "QueryRequest",
+                "required": [
+                  "user_query",
+                  "session_id"
+                ],
+                "type": "object",
+                "properties": {
+                  "user_query": {
+                    "title": "User Query",
+                    "type": "string"
+                  },
+                  "session_id": {
+                    "title": "Session Id",
+                    "type": "string",
+                    "description": "ID de sessão para gerenciar o estado da conversa"
+                  }
+                }
+              }
+            }
+          }
+        }
       },
       {
-        "name": "Integração com SQL Server",
-        "description": "Conexão e consultas ao banco de dados SQL Server para obtenção de dados de negócio",
+        "name": "status",
+        "description": "Returns the status of the API.",
         "files": [
-          "core/connectivity/sql_server_adapter.py",
-          "core/database/sql_server_auth_db.py"
-        ]
-      },
-      {
-        "name": "Agente Supervisor LangGraph",
-        "description": "Sistema de orquestração de agentes baseado em LangGraph para processamento de consultas",
-        "files": [
-          "core/graph/graph_builder.py",
-          "core/agents/code_gen_agent.py"
-        ]
-      },
-      {
-        "name": "Visualização de Dados",
-        "description": "Geração de gráficos e visualizações de dados usando Plotly",
-        "files": [
-          "streamlit_app.py",
-          "streamlit_teste_novo.py"
-        ]
-      },
-      {
-        "name": "Autenticação e Segurança",
-        "description": "Sistema de autenticação e gerenciamento de sessões de usuário",
-        "files": [
-          "core/auth.py",
-          "core/security.py"
-        ]
-      },
-      {
-        "name": "API Backend",
-        "description": "API FastAPI e Flask para processamento de consultas e agendamento de tarefas",
-        "files": [
-          "core/main.py",
-          "core/api/run_api.py"
-        ]
-      },
-      {
-        "name": "Pipeline de Dados",
-        "description": "Scripts para extração, transformação e carregamento de dados do SQL Server para arquivos Parquet",
-        "files": [
-          "core/data_updater.py",
-          "dags/"
-        ]
-      },
-      {
-        "name": "Integração com LLM",
-        "description": "Integração com modelos de linguagem OpenAI para processamento de consultas em linguagem natural",
-        "files": [
-          "core/llm_adapter.py",
-          "core/llm_base.py"
-        ]
-      },
-      {
-        "name": "Logging e Monitoramento",
-        "description": "Sistema de logging estruturado e monitoramento de erros",
-        "files": [
-          "core/config/logging_config.py"
-        ]
-      },
-      {
-        "name": "Testes",
-        "description": "Testes unitários e de integração para validação do sistema",
-        "files": [
-          "tests/conftest.py",
-          "tests/test_suite_completa.py",
-          "scripts/run_tests_with_server.py"
-        ]
+          "main.py"
+        ],
+        "api_doc": {
+          "openapi": "3.0.0",
+          "info": {
+            "title": "Agent_BI - API Gateway",
+            "version": "3.0.0"
+          },
+          "paths": {
+            "/status": {
+              "get": {
+                "summary": "Status",
+                "responses": {
+                  "200": {
+                    "description": "Successful Response",
+                    "content": {
+                      "application/json": {
+                        "schema": {
+                          "type": "object",
+                          "properties": {
+                            "status": {
+                              "type": "string"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
       }
     ]
   }
