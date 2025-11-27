@@ -1,6 +1,6 @@
 # 🤖 Agent Solution BI
 
-##Sistema de Business Intelligence com IA - Multi-Interface
+## Sistema de Business Intelligence com IA - Multi-Interface
 
 **3 Interfaces. 1 Backend. Infinitas Possibilidades.**
 
@@ -132,6 +132,17 @@ Endpoints REST documentados:
 │            Parquet Data Lake                 │
 └──────────────────────────────────────────────┘
 ```
+
+## 🌟 Melhorias Recentes
+
+Para um histórico detalhado das correções e otimizações, consulte os documentos abaixo:
+
+| Documento | Descrição |
+|-----------|-----------|
+| [QUICK_WINS_IMPLEMENTADOS.md](QUICK_WINS_IMPLEMENTADOS.md) | Lista de melhorias rápidas e de alto impacto implementadas. |
+| [CORRECOES_APLICADAS.md](CORRECOES_APLICADAS.md) | Detalhamento das correções de bugs e ajustes de estabilidade. |
+| [ANALISE_PERFORMANCE_PROFUNDA.md](ANALISE_PERFORMANCE_PROFUNDA.md) | Análise aprofundada e otimizações de performance do sistema. |
+| [RESULTADO_FINAL_TESTES.md](RESULTADO_FINAL_TESTES.md) | Sumário dos resultados após a bateria final de testes. |
 
 ## 📊 Exemplos de Uso
 
