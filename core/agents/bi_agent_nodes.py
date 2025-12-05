@@ -702,14 +702,34 @@ def generate_plotly_spec(state: AgentState, code_gen_agent: CodeGenAgent) -> Dic
             3. **SALVE O RESULTADO NA VARIÁVEL `result`:** A última linha do seu script DEVE ser a atribuição do resultado final à variável `result`. Esta é a única forma que o sistema tem para ver sua resposta. NÃO use `print()`.
 
             **REGRAS OBRIGATÓRIAS:**
+            0. **🚨 CRÍTICO: Última linha deve ser SEMPRE `result = <Plotly Figure ou DataFrame>` - NUNCA retorne dicionário de erro!**
             1. **SEMPRE defina variáveis antes de usar:** Se usar `produto_id`, defina antes (ex: `produto_id = 369947`)
             2. **Produtos em Excesso:** Filtre `estoque_atual > linha_verde`
             3. **"linha verde" NÃO é segmento:** É uma COLUNA (linha_verde) que indica meta de estoque
             4. **Produtos que precisam ajuste na linha verde:** Filtre onde `estoque_atual != linha_verde`
             5. **UNE:** Filtre por `une_nome` (ex: 'BON', 'TAQ', 'TIJ'), NÃO por código numérico
-            6. **Análise Temporal:** Dataset só tem venda_30_d (últimos 30 dias). NÃO há colunas de mês/trimestre
+            6. **Análise Temporal:** Dataset TEM APENAS venda_30_d (últimos 30 dias) - NÃO EXISTEM colunas mes_01, mes_02... mes_12!
             7. **"em todas as UNEs":** Use merge para incluir UNEs com venda = 0
             8. **Top N:** Use `.head(N)` após ordenar, ou `.nlargest(N, coluna)`
+            9. **Gráficos de tendência temporal:** Use venda_30_d como métrica - é a ÚNICA disponível para vendas. Para comparativo entre segmentos/produtos, agrupar por nomesegmento/NOMEFABRICANTE e somar venda_30_d
+            10. **Se não tiver dados:** SEMPRE criar uma Figure Plotly com mensagem de aviso (use `go.Figure()` com `add_annotation()`) - NÃO retorne dict de erro!
+
+            **COLUNAS REAIS DISPONÍVEIS:**
+            - `codigo` - Código do produto
+            - `nome_produto` - Nome do produto
+            - `une_nome` - Nome da UNE
+            - `nomesegmento` - Segmento (ex: 'TECIDOS', 'ARMARINHO E CONFECÇÃO')
+            - `NOMEFABRICANTE` - Fabricante/Marca
+            - `venda_30_d` - Vendas últimos 30 dias (ÚNICA métrica temporal disponível!)
+            - `estoque_atual` - Estoque em estoque
+            - `linha_verde` - Meta de estoque (line verde)
+            - `preco_38_percent` - Preço venda
+            - `nomegrupo` - Grupo do produto
+            
+            **Não usar estas colunas (NÃO EXISTEM):**
+            ❌ `mes_01`, `mes_02`, ... `mes_12` - ESTAS COLUNAS NÃO EXISTEM!
+            ❌ Qualquer coluna com padrão mes_*
+            ❌ `mês`, `month`, `data_venda`, `período`
 
             **Exemplo 1 - Top 10 produtos por UNE:**
             ```python
@@ -739,6 +759,40 @@ def generate_plotly_spec(state: AgentState, code_gen_agent: CodeGenAgent) -> Dic
             # Agrupar por segmento (só temos venda_30_d, sem histórico mensal!)
             segmentos = df_une.groupby('nomesegmento')['venda_30_d'].sum().sort_values(ascending=False)
             result = segmentos.reset_index()
+            ```
+
+            **Exemplo 4 - GRÁFICO COMPARATIVO (sempre retornar Figure Plotly):**
+            ```python
+            import plotly.express as px
+            import plotly.graph_objects as go
+            df = load_data()
+            
+            # Filtrar dados
+            df_filtered = df[df['nomesegmento'] == 'TECIDOS'].copy()
+            
+            # ✅ VALIDAÇÃO CRÍTICA: Se não tiver dados, criar gráfico de aviso
+            if len(df_filtered) == 0:
+                # Em vez de retornar dicionário de erro, criar gráfico que mostre a mensagem
+                fig = go.Figure()
+                fig.add_annotation(
+                    text="❌ Nenhum dado encontrado para essa query",
+                    xref="paper", yref="paper",
+                    x=0.5, y=0.5,
+                    showarrow=False,
+                    font=dict(size=16, color="red")
+                )
+                fig.update_layout(title="Aviso: Sem Dados", xaxis_visible=False, yaxis_visible=False)
+                result = fig
+            else:
+                # Agrupar e criar gráfico
+                agg_data = df_filtered.groupby('NOMEFABRICANTE')['venda_30_d'].sum().sort_values(ascending=False).head(10)
+                fig = px.bar(
+                    x=agg_data.index, 
+                    y=agg_data.values,
+                    title='Comparativo de Vendas TECIDOS',
+                    labels={{'x': 'Fabricante', 'y': 'Total Vendido (30 dias)'}}
+                )
+                result = fig
             ```
 
 

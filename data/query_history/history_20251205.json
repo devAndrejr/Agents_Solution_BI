@@ -1,0 +1,74 @@
+[
+  {
+    "query": "olá bom dia tudo bem",
+    "session_id": "bcb03773-9184-499d-b028-b368ee8816a4",
+    "timestamp": "2025-12-05T11:15:11.974998",
+    "success": true,
+    "results_count": 0,
+    "error": null,
+    "processing_time": 0.0
+  },
+  {
+    "query": "me chamo André então sou homem",
+    "session_id": "bcb03773-9184-499d-b028-b368ee8816a4",
+    "timestamp": "2025-12-05T11:15:39.482384",
+    "success": true,
+    "results_count": 0,
+    "error": null,
+    "processing_time": 0.0
+  },
+  {
+    "query": "estou preocupado com as vendas de tecidos. preciso saber com esta a venda de tecidos na une 1685",
+    "session_id": "bcb03773-9184-499d-b028-b368ee8816a4",
+    "timestamp": "2025-12-05T11:17:14.140561",
+    "success": true,
+    "results_count": 0,
+    "error": null,
+    "processing_time": 0.0
+  },
+  {
+    "query": "VOCÊ ME RESPONDEU TUDO ERRADO. RECISE SUA RESPOSTA E ME GERE UM GRÁFICO COMPARATIVO DE VENDAS DE TECIDOS NA UNE 1685",
+    "session_id": "bcb03773-9184-499d-b028-b368ee8816a4",
+    "timestamp": "2025-12-05T11:20:26.669095",
+    "success": true,
+    "results_count": 0,
+    "error": null,
+    "processing_time": 0.0
+  },
+  {
+    "query": "preciso saber o ranking de vendas de tecidos na une 2365",
+    "session_id": "0c1e7e98-5e25-4688-ae63-508c611cfdf4",
+    "timestamp": "2025-12-05T11:55:58.713860",
+    "success": true,
+    "results_count": 0,
+    "error": null,
+    "processing_time": 0.0
+  },
+  {
+    "query": "rankin de vendas de tecidos dos ultimos 3 meses",
+    "session_id": "0c1e7e98-5e25-4688-ae63-508c611cfdf4",
+    "timestamp": "2025-12-05T11:56:41.173078",
+    "success": true,
+    "results_count": 0,
+    "error": null,
+    "processing_time": 0.0
+  },
+  {
+    "query": "ola boa tarde, me chamo andré estou preocupado com as vendas de \\tnt",
+    "session_id": "98a1f109-8a56-4953-83f0-fa9715ebb3db",
+    "timestamp": "2025-12-05T12:27:23.820336",
+    "success": true,
+    "results_count": 0,
+    "error": null,
+    "processing_time": 0.0
+  },
+  {
+    "query": "segmento tecidos o TNT",
+    "session_id": "98a1f109-8a56-4953-83f0-fa9715ebb3db",
+    "timestamp": "2025-12-05T12:28:18.843921",
+    "success": true,
+    "results_count": 0,
+    "error": null,
+    "processing_time": 0.0
+  }
+]

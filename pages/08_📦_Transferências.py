@@ -53,13 +53,11 @@ def get_unes_disponiveis():
         # Tentar carregar do Parquet diretamente
         parquet_path = Path(__file__).parent.parent / 'data' / 'parquet'
 
-        # Verificar qual arquivo existe
-        if (parquet_path / 'admmat_extended.parquet').exists():
-            parquet_file = parquet_path / 'admmat_extended.parquet'
-        elif (parquet_path / 'admmat.parquet').exists():
-            parquet_file = parquet_path / 'admmat.parquet'
-        else:
-            st.error("Arquivo Parquet não encontrado")
+        # Usar arquivo correto (admmat.parquet)
+        parquet_file = parquet_path / 'admmat.parquet'
+        
+        if not parquet_file.exists():
+            st.error(f"❌ Arquivo Parquet não encontrado em {parquet_file}")
             return []
 
         # Carregar apenas colunas UNE e nomesegmento
@@ -108,7 +106,11 @@ def get_produtos_une(une_id):
         import pyarrow.parquet as pq
         import pyarrow.compute as pc
 
-        parquet_file = Path(__file__).parent.parent / 'data' / 'parquet' / 'admmat_extended.parquet'
+        parquet_file = Path(__file__).parent.parent / 'data' / 'parquet' / 'admmat.parquet'
+        
+        if not parquet_file.exists():
+            st.error(f"❌ Arquivo Parquet não encontrado em {parquet_file}")
+            return []
 
         # OTIMIZAÇÃO: PyArrow com push-down filters
         filters_list = [('une', '=', int(une_id))]
@@ -149,7 +151,7 @@ def get_produtos_une(une_id):
     except ImportError:
         # Fallback se PyArrow não estiver disponível
         st.warning("⚠️ PyArrow não disponível - performance reduzida")
-        parquet_file = Path(__file__).parent.parent / 'data' / 'parquet' / 'admmat_extended.parquet'
+        parquet_file = Path(__file__).parent.parent / 'data' / 'parquet' / 'admmat.parquet'
 
         df = pd.read_parquet(parquet_file)
         df = df[df['une'] == int(une_id)]
@@ -327,16 +329,26 @@ with col1:
 
 with col2:
     user_segmento = st.session_state.get("segmento")
+    user_role = st.session_state.get("role")
     segmentos_disponiveis = list(set([p.get('nomesegmento', 'N/A') for p in produtos if p.get('nomesegmento')]))
     
-    # Se o usuário tem um segmento definido, ele só pode ver o seu segmento
-    if user_segmento and user_segmento != "Todos":
+    # Admin sempre tem acesso a todos os segmentos (não desabilitado)
+    # Usuários normais com segmento definido só veem seu segmento (desabilitado)
+    if user_role == "admin":
+        # Admin vê todos os segmentos e pode mudar
+        segmento_filtro_options = ["Todos"] + sorted(segmentos_disponiveis)
+        default_segmento_index = 0
+        is_segmento_disabled = False
+        st.markdown("✅ **Admin:** Acesso a todos os segmentos")
+    elif user_segmento and user_segmento != "Todos":
+        # Usuário normal vê apenas seu segmento
         segmento_filtro_options = [user_segmento]
         default_segmento_index = 0
         is_segmento_disabled = True
     else:
+        # Sem segmento definido
         segmento_filtro_options = ["Todos"] + sorted(segmentos_disponiveis)
-        default_segmento_index = 0 # "Todos" is default
+        default_segmento_index = 0
         is_segmento_disabled = False
 
     segmento_filtro = st.selectbox(
@@ -402,14 +414,16 @@ st.info(f"📊 **{len(produtos_filtrados)}** produtos encontrados (de {len(produ
 if produtos_filtrados:
     st.markdown("### ✅ Selecione os produtos para transferir")
 
-    # Inicializar carrinho se não existir
+    # Inicializar carrinho e seleções se não existirem
     if 'carrinho_transferencia' not in st.session_state:
         st.session_state.carrinho_transferencia = {}
+    if 'produtos_selecionados' not in st.session_state:
+        st.session_state.produtos_selecionados = {}
 
     # Mostrar produtos
     df_produtos = pd.DataFrame(produtos_filtrados)
 
-    # Formatação
+    # Formatação de preço
     if 'preco_38_percent' in df_produtos.columns:
         df_produtos['preco_38_percent'] = pd.to_numeric(df_produtos['preco_38_percent'], errors='coerce')
         df_produtos['preco_38_percent'] = df_produtos['preco_38_percent'].apply(
@@ -439,10 +453,117 @@ if produtos_filtrados:
     )
 
     st.markdown(f"Mostrando {start_idx+1}-{min(end_idx, len(df_produtos))} de {len(df_produtos)} produtos")
-
-    # --- ADICIONAR AO CARRINHO ---
+    
+    # Botões de seleção em massa
+    col_sel1, col_sel2, col_sel3 = st.columns([1, 1, 2])
+    
+    with col_sel1:
+        if st.button("✅ Selecionar Tudo", use_container_width=True):
+            for idx, row in df_produtos.iterrows():
+                codigo = str(row.get('codigo', ''))
+                st.session_state.produtos_selecionados[codigo] = True
+            st.success(f"✅ {len(df_produtos)} produtos selecionados!")
+            st.rerun()
+    
+    with col_sel2:
+        if st.button("❌ Deselecionar Tudo", use_container_width=True):
+            st.session_state.produtos_selecionados = {}
+            st.info("❌ Todos os produtos deselecioandos")
+            st.rerun()
+    
+    with col_sel3:
+        num_selecionados = len([k for k, v in st.session_state.produtos_selecionados.items() if v])
+        st.markdown(f"📦 **Selecionados:** {num_selecionados}/{len(df_produtos)} produtos")
+    
+    # Divisor
     st.markdown("---")
-    st.subheader("🛒 Adicionar ao Carrinho")
+    
+    # Exibir checkboxes para cada produto
+    st.markdown("**🔍 Clique no checkbox para selecionar o produto:**")
+    
+    for idx, row in df_page.iterrows():
+        codigo = str(row.get('codigo', ''))
+        nome = row.get('nome_produto', 'N/A')
+        estoque = int(row.get('estoque_atual', 0))
+        preco_str = row.get('preco_38_percent', 'N/A')
+        
+        # Checkbox com informações do produto
+        is_selected = st.session_state.produtos_selecionados.get(codigo, False)
+        
+        col_check, col_info, col_qty = st.columns([0.4, 2, 0.6])
+        
+        with col_check:
+            is_selected = st.checkbox(
+                label="",
+                value=is_selected,
+                key=f"select_{codigo}_{idx}"
+            )
+            st.session_state.produtos_selecionados[codigo] = is_selected
+        
+        with col_info:
+            status = "✅" if is_selected else "⚪"
+            st.write(f"{status} **{codigo}** - {nome} | Estoque: {estoque} | {preco_str}")
+        
+        with col_qty:
+            if is_selected:
+                qtd = st.number_input(
+                    "Qtd",
+                    min_value=1,
+                    max_value=estoque if estoque > 0 else 1,
+                    value=1,
+                    key=f"qty_{codigo}_{idx}"
+                )
+                st.session_state.produtos_selecionados[f"{codigo}_qtd"] = qtd
+
+    # Botão para adicionar todos os produtos selecionados ao carrinho
+    st.markdown("---")
+    
+    # Contar selecionados
+    produtos_selecionados_lista = [
+        (codigo, st.session_state.produtos_selecionados.get(f"{codigo}_qtd", 1))
+        for codigo in st.session_state.produtos_selecionados.keys()
+        if codigo in [str(p.get('codigo', '')) for p in produtos_filtrados] 
+        and st.session_state.produtos_selecionados.get(codigo, False)
+    ]
+    
+    if produtos_selecionados_lista:
+        col_btn1, col_btn2 = st.columns([2, 1])
+        
+        with col_btn1:
+            st.info(f"📦 **{len(produtos_selecionados_lista)} produto(s) selecionado(s)** - Clique em 'Adicionar ao Carrinho' para prosseguir")
+        
+        with col_btn2:
+            if st.button("🛒 Adicionar ao Carrinho", use_container_width=True, type="primary"):
+                # Adicionar cada produto selecionado
+                for codigo, qtd in produtos_selecionados_lista:
+                    produto = next((p for p in produtos_filtrados if str(p.get('codigo')) == str(codigo)), None)
+                    if produto:
+                        une_origem = produto.get('une_origem', unes_origem[0])
+                        chave = f"{codigo}_UNE{une_origem}"
+                        
+                        if len(unes_destino) > 1:
+                            # Modo N→N: distribuição por destino (distribuir igualmente)
+                            qtd_por_destino = int(qtd / len(unes_destino))
+                            distribuicao = {une: qtd_por_destino for une in unes_destino}
+                            distribuicao[unes_destino[0]] += qtd % len(unes_destino)  # Resto vai para primeiro destino
+                        else:
+                            # Modo 1→1: transferência para uma UNE
+                            distribuicao = {unes_destino[0]: qtd}
+                        
+                        st.session_state.carrinho_transferencia[chave] = {
+                            'produto': produto,
+                            'une_origem': une_origem,
+                            'distribuicao': distribuicao,
+                            'total': qtd,
+                            'preco': produto.get('preco_38_percent', 0),
+                            'valor_total_item': qtd * pd.to_numeric(produto.get('preco_38_percent', 0), errors='coerce')
+                        }
+                
+                st.success(f"✅ {len(produtos_selecionados_lista)} produto(s) adicionado(s) ao carrinho!")
+                st.session_state.produtos_selecionados = {}  # Limpar seleção
+                st.rerun()
+    else:
+        st.info("👇 Selecione os produtos acima para adicionar ao carrinho")
 
     # Modo 1→N ou N→N: permitir distribuição de quantidade por destino
     if len(unes_destino) > 1:
@@ -943,7 +1064,7 @@ if 'sugestoes_transferencia' in st.session_state and st.session_state.sugestoes_
                     # Tentar carregar produto específico do Parquet
                     try:
                         import pyarrow.parquet as pq
-                        parquet_file = Path(__file__).parent.parent / 'data' / 'parquet' / 'admmat_extended.parquet'
+                        parquet_file = Path(__file__).parent.parent / 'data' / 'parquet' / 'admmat.parquet'
 
                         # Buscar produto específico (sem limite de 1000)
                         table = pq.read_table(

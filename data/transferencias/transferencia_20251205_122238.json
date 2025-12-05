@@ -1,0 +1,40 @@
+{
+  "timestamp": "2025-12-05T12:22:38.204559",
+  "usuario": "admin",
+  "modo": "1",
+  "unes_origem": [
+    1
+  ],
+  "unes_destino": [
+    35,
+    520
+  ],
+  "produtos": {
+    "13231_UNE1": {
+      "produto": {
+        "codigo": 13231,
+        "nome_produto": "FIO POLLY/BONFIO 70GRS R. 19 VERMELHO",
+        "estoque_atual": 68.0,
+        "venda_30_d": 55.0,
+        "preco_38_percent": 5.99,
+        "nomesegmento": "ARMARINHO E CONFECÇÃO",
+        "NOMEFABRICANTE": "BONFIO",
+        "une_origem": 1
+      },
+      "une_origem": 1,
+      "distribuicao": {
+        "35": 50,
+        "520": 18
+      },
+      "total": 68,
+      "preco": 5.99,
+      "valor_total_item": 407.32
+    }
+  },
+  "total_produtos": 1,
+  "total_itens": 68,
+  "total_valor": 407.32,
+  "prioridade": "Urgente",
+  "observacoes": "urgencia",
+  "status": "PENDENTE"
+}

@@ -44,17 +44,17 @@ if st.session_state.get("authenticated") and st.session_state.get("role") == "ad
             st.error("❌ API Key do Gemini não configurada. Configure GEMINI_API_KEY nas variáveis de ambiente.")
             st.stop()
 
-        # Inicializar o adaptador do Gemini
-        if 'gemini_adapter' not in st.session_state:
-            # Usar o modelo específico do Gemini se disponível
+        # Usar @st.cache_resource para evitar erro de serialização do OpenAI client
+        @st.cache_resource(show_spinner="Inicializando Gemini...")
+        def load_gemini_adapter():
             gemini_model = getattr(settings, 'GEMINI_MODEL_NAME', settings.LLM_MODEL_NAME)
-            st.session_state.gemini_adapter = GeminiLLMAdapter(
+            return GeminiLLMAdapter(
                 api_key=settings.GEMINI_API_KEY,
                 model_name=gemini_model,
                 enable_cache=True
             )
 
-        gemini = st.session_state.gemini_adapter
+        gemini = load_gemini_adapter()
 
         # Layout em colunas
         col1, col2 = st.columns([2, 1])
@@ -66,9 +66,8 @@ if st.session_state.get("authenticated") and st.session_state.get("role") == "ad
                 from core.config.safe_settings import reset_safe_settings_cache
                 # Limpa o cache de settings para forçar a releitura do .env
                 reset_safe_settings_cache()
-                # Força a remoção do adaptador da sessão para que ele seja recriado com a nova chave
-                if 'gemini_adapter' in st.session_state:
-                    del st.session_state['gemini_adapter']
+                # Limpa o cache do adapter para que ele seja recriado com a nova chave
+                st.cache_resource.clear()
                 st.success("Configuração da API recarregada. Tente seu prompt novamente.")
                 st.rerun()
             
